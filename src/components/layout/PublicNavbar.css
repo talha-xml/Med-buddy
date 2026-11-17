@@ -1,0 +1,123 @@
+/* Public Header / Navbar */
+.landing-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 48px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+}
+
+.landing-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-icon-box {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.landing-nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-nav-links a {
+  text-decoration: none;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.98rem;
+  transition: all 0.2s ease;
+  padding: 8px 16px;
+  border-radius: 9px;
+}
+
+.landing-nav-links a:hover {
+  color: var(--primary);
+  background: rgba(2, 132, 199, 0.06);
+}
+
+.landing-nav-links a.active-link {
+  color: var(--primary);
+  background: #e0f2fe;
+  font-weight: 700;
+}
+
+.landing-auth-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nav-login-btn {
+  text-decoration: none;
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 9px 20px;
+  border-radius: 9px;
+  border: 1.5px solid #cbd5e1;
+  background: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+}
+
+.nav-login-btn:hover {
+  background: #ffffff;
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.12);
+}
+
+.nav-register-btn {
+  text-decoration: none;
+  color: white;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 10px 24px;
+  border-radius: 9px;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.nav-register-btn:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+}
+
+@media (max-width: 900px) {
+  .landing-nav {
+    padding: 14px 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .landing-nav-links {
+    gap: 12px;
+  }
+}
+

@@ -1,0 +1,349 @@
+.locations-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+}
+
+/* Hero Section */
+.locations-hero {
+  padding: 60px 24px 40px;
+  background: 
+    radial-gradient(circle at 15% 20%, rgba(224, 242, 254, 0.8) 0%, transparent 45%),
+    radial-gradient(circle at 85% 30%, rgba(204, 251, 241, 0.7) 0%, transparent 40%),
+    linear-gradient(180deg, #f0fdfa 0%, #f8fafc 100%);
+  text-align: center;
+}
+
+.locations-hero-inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.locations-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #ccfbf1;
+  color: #0f766e;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  border: 1px solid #99f6e4;
+}
+
+.locations-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.025em;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.locations-subtitle {
+  font-size: 1.08rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 auto 28px;
+}
+
+/* Fast Stats Bar */
+.locations-stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  flex-wrap: wrap;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+  max-width: 640px;
+  margin: 0 auto;
+  backdrop-filter: blur(8px);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-number {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0284c7;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Main Content Section */
+.locations-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  box-sizing: border-box;
+}
+
+.locations-section-intro {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.locations-section-intro h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 10px;
+}
+
+.locations-section-intro p {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Grid of Cards */
+.cities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 30px;
+}
+
+.city-card {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 4px 18px -4px rgba(15, 23, 42, 0.06);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.city-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px -8px rgba(2, 132, 199, 0.16);
+  border-color: #38bdf8;
+}
+
+/* Card Image Box */
+.city-image-container {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background-color: #e2e8f0;
+}
+
+.city-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.city-card:hover .city-image {
+  transform: scale(1.05);
+}
+
+.city-province-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(4px);
+}
+
+.city-status-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #22c55e;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+/* Card Body */
+.city-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.city-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.city-name {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.city-landmark {
+  font-size: 0.85rem;
+  color: #0284c7;
+  font-weight: 700;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.city-description {
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 18px;
+  flex: 1;
+}
+
+.city-meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 14px;
+}
+
+.city-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.city-meta-item strong {
+  color: #0f172a;
+}
+
+/* Card Action */
+.city-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 18px;
+  background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.2);
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.city-action-btn:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+}
+
+/* Expansion Banner */
+.locations-expansion-banner {
+  margin-top: 60px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 20px;
+  padding: 40px;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.expansion-content h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+
+.expansion-content p {
+  color: #94a3b8;
+  font-size: 0.96rem;
+  max-width: 580px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.expansion-btn {
+  padding: 12px 26px;
+  background: #0284c7;
+  color: #ffffff;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.expansion-btn:hover {
+  background: #0369a1;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+}
+
+@media (max-width: 768px) {
+  .locations-title {
+    font-size: 2rem;
+  }
+  .cities-grid {
+    grid-template-columns: 1fr;
+  }
+  .locations-expansion-banner {
+    padding: 26px;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+

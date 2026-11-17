@@ -1,0 +1,75 @@
+/* Danger Zone Card Styling */
+.danger-zone-card {
+  margin-top: 36px;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1.5px solid #fecaca;
+  box-shadow: var(--shadow-sm);
+  padding: 24px 28px;
+}
+
+.danger-zone-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #dc2626;
+  margin-bottom: 8px;
+}
+
+.danger-zone-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.danger-zone-desc {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.delete-action-btn {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-action-btn:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+
+.delete-confirmation-box {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #fff1f2;
+  border-radius: 10px;
+  border: 1px solid #fecdd3;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.delete-confirm-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-confirm-btn:hover {
+  background: #b91c1c;
+}
+
