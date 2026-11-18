@@ -4,9 +4,9 @@
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
-### 🛡️ Admin Portal (Manual URL Access Only: `/admin`, `/login/admin`, `/register/admin`)
+### Admin Portal (Manual URL Access Only: `/admin`, `/login/admin`, `/register/admin`)
 - **Centralized Healthcare Governance**: Super administrator dashboard for overseeing all clinical and outpatient activity.
 - **Demographic & City Metrics**: Real-time aggregated breakdown showing total registered patients and doctors by specific cities (Lahore, Karachi, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Quetta, etc.).
 - **Doctor Verification Visibility**: Admins can inspect whether doctors are verified or pending verification. Verification is performed exclusively by the medical practitioners themselves via PMDC license input.
@@ -19,7 +19,7 @@
   - Logged-in administrators attempting to visit doctor or patient portals are bounced back to `/admin`.
 - **Directory Rosters**: Interactive search, city filtering, and status filtering across all registered doctors and patients.
 
-### 🩺 Doctor / Healthcare Practitioner Portal
+### Doctor / Healthcare Practitioner Portal
 - **Default Unverified State**: All new doctor profiles are initialized as **Not Verified** by default.
 - **Navbar "Account Status" Menu Option**: Placed directly above the *Sign Out* button in the profile dropdown, prompting doctors with a highlighted **"Please Verify"** status badge.
 - **Self-Service PMDC Verification**: Doctors click *Account Status* to open the verification modal and submit their valid **PMDC-(5+ digit number)** credential (e.g. `PMDC-12345`).
@@ -27,7 +27,7 @@
 - **Appointment Status Control**: Review pending patient requests and update consultation status (`Confirmed`, `Completed`, `Cancelled`).
 - **Patient Clinical Summaries**: Access patient blood groups, allergies, and emergency contacts before consultations.
 
-### 👤 Patient Portal
+### Patient Portal
 - **Browse & Search Doctors**: Filter certified physicians by city, clinical specialty, and keyword search.
 - **Interactive Slot Booking**: Select a city, specialty, available practitioner, appointment date, time slot, and reason for consultation.
 - **Appointment Management**: Track upcoming and past appointments categorized by status (`Pending`, `Confirmed`, `Completed`, `Cancelled`).
@@ -35,7 +35,7 @@
 
 ---
 
-## 🔑 Demo & Test Credentials
+## Demo & Test Credentials
 
 ### Super Administrator Portal (Direct URL: `/admin` or `/login/admin`)
 - **Email**: `admin@medbuddy.healthcare`
@@ -53,7 +53,7 @@
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Install Dependencies
 ```bash
