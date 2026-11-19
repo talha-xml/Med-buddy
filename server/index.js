@@ -286,7 +286,7 @@ app.get('/api/doctors', (req, res) => {
   }
 });
 
-// ==================== APPOINTMENT ROUTES ====================
+// APPOINTMENT ROUTES
 
 // Get Appointments (can filter by patientId or doctorId)
 app.get('/api/appointments', (req, res) => {
