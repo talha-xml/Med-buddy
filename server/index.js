@@ -8,8 +8,6 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// ==================== AUTH ROUTES ====================
-
 // Login
 app.post('/api/auth/login', (req, res) => {
   try {
@@ -41,26 +39,6 @@ app.post('/api/auth/login', (req, res) => {
       return res.status(401).json({ error: 'Incorrect password. Please try again.' });
     }
 
-    // Doctor Verification & Disabled check in backend
-    if (user.role === 'doctor') {
-      if (user.isEnabled === 0) {
-        return res.status(403).json({
-          error:
-            'Your account is disabled by the Admin for not verifying. Please contact the admin at admin@medbuddy.healthcare to enable ur account.',
-          reason: 'disabled'
-        });
-      }
-      if (user.isVerified === 0) {
-        return res.status(403).json({
-          error:
-            'Your doctor credentials are not verified yet. Healthcare practitioners must be verified before accessing the portal.',
-          reason: 'unverified',
-          user: { id: user.id, fullName: user.fullName, email: user.email, role: user.role }
-        });
-      }
-    }
-
-    // Omit password from response
     const { password: _, ...userSafe } = user;
     res.json({ user: userSafe });
   } catch (err) {
@@ -84,7 +62,9 @@ app.post('/api/auth/register', (req, res) => {
       phone,
       dateOfBirth,
       city,
-      country
+      country,
+      availableFrom,
+      availableTo
     } = req.body;
 
     if (!fullName || !email || !password || !role) {
@@ -101,9 +81,10 @@ app.post('/api/auth/register', (req, res) => {
     const insertStmt = db.prepare(`
       INSERT INTO users (
         id, fullName, email, password, role, specialty,
-        yearsOfExperience, experienceDomain, bio, phone, dateOfBirth, city, country
+        yearsOfExperience, experienceDomain, bio, phone, dateOfBirth, city, country,
+        availableFrom, availableTo
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     insertStmt.run(
@@ -119,7 +100,9 @@ app.post('/api/auth/register', (req, res) => {
       phone || null,
       dateOfBirth || null,
       city || null,
-      country || null
+      country || null,
+      availableFrom || (role === 'doctor' ? '09:00 AM' : null),
+      availableTo || (role === 'doctor' ? '05:00 PM' : null)
     );
 
     const newUser = db.prepare('SELECT * FROM users WHERE id = ?').get(id);
@@ -167,7 +150,9 @@ app.put('/api/users/:id', (req, res) => {
       city,
       country,
       isVerified,
-      isEnabled
+      isEnabled,
+      availableFrom,
+      availableTo
     } = req.body;
 
     const existing = db.prepare('SELECT * FROM users WHERE id = ?').get(id);
@@ -192,7 +177,9 @@ app.put('/api/users/:id', (req, res) => {
           city = COALESCE(?, city),
           country = COALESCE(?, country),
           isVerified = CASE WHEN ? IS NOT NULL THEN ? ELSE isVerified END,
-          isEnabled = CASE WHEN ? IS NOT NULL THEN ? ELSE isEnabled END
+          isEnabled = CASE WHEN ? IS NOT NULL THEN ? ELSE isEnabled END,
+          availableFrom = COALESCE(?, availableFrom),
+          availableTo = COALESCE(?, availableTo)
       WHERE id = ?
     `);
 
@@ -215,6 +202,8 @@ app.put('/api/users/:id', (req, res) => {
       isVerified !== undefined ? (isVerified ? 1 : 0) : null,
       isEnabled !== undefined ? (isEnabled ? 1 : 0) : null,
       isEnabled !== undefined ? (isEnabled ? 1 : 0) : null,
+      availableFrom !== undefined ? availableFrom : null,
+      availableTo !== undefined ? availableTo : null,
       id
     );
 
@@ -262,13 +251,14 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 // List Doctors (with optional search, city, and specialty filters)
+// Excludes disabled doctors so they are never visible to the general public or patients
 app.get('/api/doctors', (req, res) => {
   try {
     const { city, specialty, search } = req.query;
     let query = `
       SELECT id, fullName, email, role, specialty, yearsOfExperience, experienceDomain, phone, clinicAddress, bio, city, country, isVerified, isEnabled
       FROM users
-      WHERE role = 'doctor'
+      WHERE role = 'doctor' AND (isEnabled IS NULL OR isEnabled != 0)
     `;
     const params = [];
 
@@ -326,10 +316,27 @@ app.get('/api/appointments', (req, res) => {
 // Book Appointment (Defaults to Pending)
 app.post('/api/appointments', (req, res) => {
   try {
-    const { patientId, patientName, doctorId, doctorName, specialty, date, time, reason } = req.body;
+    const { patientId, patientName, doctorId, doctorName, specialty, date, time, reason } =
+      req.body;
 
     if (!patientId || !doctorId || !date || !time || !reason) {
       return res.status(400).json({ error: 'Missing required appointment details.' });
+    }
+
+    // Check if slot is already taken for this doctor on this date (active appointments: Pending or Confirmed)
+    const existingConflict = db
+      .prepare(
+        `
+      SELECT id, patientName, time FROM appointments
+      WHERE doctorId = ? AND date = ? AND time = ? AND status IN ('Pending', 'Confirmed')
+    `
+      )
+      .get(doctorId, date, time);
+
+    if (existingConflict) {
+      return res.status(409).json({
+        error: 'This time slot is already filled. Please select a different time slot or date.'
+      });
     }
 
     const id = `apt-${Date.now()}`;
@@ -340,7 +347,34 @@ app.post('/api/appointments', (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
-    insertStmt.run(id, patientId, patientName, doctorId, doctorName, specialty, date, time, reason, status);
+    insertStmt.run(
+      id,
+      patientId,
+      patientName,
+      doctorId,
+      doctorName,
+      specialty,
+      date,
+      time,
+      reason,
+      status
+    );
+
+    // Create Notification for the Doctor
+    const notifId = `notif-${Date.now()}`;
+    const notifMsg = `You have a new appointment request by ${patientName} at ${time}. Please confirm the request`;
+    const notifStmt = db.prepare(`
+      INSERT INTO notifications (id, userId, title, message, type, appointmentId, isRead)
+      VALUES (?, ?, ?, ?, ?, ?, 0)
+    `);
+    notifStmt.run(
+      notifId,
+      doctorId,
+      'New Appointment Request',
+      notifMsg,
+      'appointment_request',
+      id
+    );
 
     const newApt = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
     res.status(201).json({ appointment: newApt });
@@ -369,10 +403,86 @@ app.patch('/api/appointments/:id/status', (req, res) => {
     }
 
     const updated = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+
+    // Send notification to the respective patient
+    let notifTitle = 'Appointment Update';
+    let notifMsg = `Your appointment with Dr. ${updated.doctorName} for ${updated.date} (${updated.time}) has been marked as ${status}.`;
+
+    if (status === 'Confirmed') {
+      notifTitle = 'Appointment Approved';
+      notifMsg = `Your appointment consultation with Dr. ${updated.doctorName} at ${updated.time} on ${updated.date} has been confirmed.`;
+    } else if (status === 'Cancelled') {
+      notifTitle = 'Appointment Declined / Cancelled';
+      notifMsg = `Your appointment consultation with Dr. ${updated.doctorName} at ${updated.time} on ${updated.date} has been cancelled.`;
+    } else if (status === 'Completed') {
+      notifTitle = 'Consultation Completed';
+      notifMsg = `Your consultation with Dr. ${updated.doctorName} has been marked as Completed.`;
+    }
+
+    const notifId = `notif-${Date.now()}`;
+    const notifStmt = db.prepare(`
+      INSERT INTO notifications (id, userId, title, message, type, appointmentId, isRead)
+      VALUES (?, ?, ?, ?, ?, ?, 0)
+    `);
+    notifStmt.run(notifId, updated.patientId, notifTitle, notifMsg, 'appointment_status', id);
+
     res.json({ appointment: updated });
   } catch (err) {
     console.error('Update appointment status error:', err);
     res.status(500).json({ error: 'Server error updating status.' });
+  }
+});
+
+// ==================== NOTIFICATIONS ROUTES ====================
+
+// Get notifications for a user (most recent first)
+app.get('/api/notifications', (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) {
+      return res.status(400).json({ error: 'userId query parameter is required.' });
+    }
+
+    const notifications = db
+      .prepare('SELECT * FROM notifications WHERE userId = ? ORDER BY createdAt DESC')
+      .all(userId);
+
+    const unreadCount = db
+      .prepare('SELECT COUNT(*) as count FROM notifications WHERE userId = ? AND isRead = 0')
+      .get(userId).count;
+
+    res.json({ notifications, unreadCount });
+  } catch (err) {
+    console.error('Fetch notifications error:', err);
+    res.status(500).json({ error: 'Server error retrieving notifications.' });
+  }
+});
+
+// Mark single notification as read
+app.patch('/api/notifications/:id/read', (req, res) => {
+  try {
+    const { id } = req.params;
+    db.prepare('UPDATE notifications SET isRead = 1 WHERE id = ?').run(id);
+    const updated = db.prepare('SELECT * FROM notifications WHERE id = ?').get(id);
+    res.json({ notification: updated });
+  } catch (err) {
+    console.error('Mark notification read error:', err);
+    res.status(500).json({ error: 'Server error updating notification.' });
+  }
+});
+
+// Mark all notifications as read for a user
+app.patch('/api/notifications/read-all', (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: 'userId is required.' });
+    }
+    db.prepare('UPDATE notifications SET isRead = 1 WHERE userId = ?').run(userId);
+    res.json({ message: 'All notifications marked as read.' });
+  } catch (err) {
+    console.error('Mark all read error:', err);
+    res.status(500).json({ error: 'Server error marking all as read.' });
   }
 });
 

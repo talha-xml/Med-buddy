@@ -113,25 +113,18 @@ export function toggleDoctorEnabled(doctorId, isEnabled) {
 
 /**
  * Check if doctor can login or stay logged in
+ * Doctors (even if disabled) are allowed to log in to their account,
+ * but disabled doctors will have restricted capabilities and be hidden from public directories.
  */
 export function canDoctorLogin(doctorId) {
   const status = getDoctorStatus(doctorId);
+  const isDisabled = status.isEnabled === false;
 
-  if (status.isEnabled === false) {
-    return {
-      allowed: false,
-      reason: 'disabled',
-      message: `Your account is disabled by the Admin for not verifying. Please contact the admin at ${ADMIN_CONTACT_EMAIL} to enable ur account.`
-    };
-  }
-
-  if (!status.isVerified) {
-    return {
-      allowed: false,
-      reason: 'unverified',
-      message: 'Your medical practitioner account has not been verified yet. Please verify your credentials or contact the Administrator.'
-    };
-  }
-
-  return { allowed: true };
+  return {
+    allowed: true,
+    isDisabled: isDisabled,
+    message: isDisabled
+      ? `Your account has been restricted by the Administrator. Please contact ${ADMIN_CONTACT_EMAIL} to restore full access.`
+      : ''
+  };
 }

@@ -1,243 +1,203 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import React from 'react';
 import PublicNavbar from '../components/layout/PublicNavbar';
 import PublicFooter from '../components/layout/PublicFooter';
-import ProfileModal from '../components/layout/ProfileModal';
-import { fetchDoctors } from '../services/apiService';
-import { standardSpecialties } from '../services/clinicalData';
 import {
-  FaSearch,
-  FaMapMarkerAlt,
-  FaPhoneAlt,
-  FaStar,
-  FaFilter,
-  FaUserMd
+  FaCalendarCheck,
+  FaUserMd,
+  FaShieldAlt,
+  FaClock,
+  FaHospital
 } from 'react-icons/fa';
-import './FindDoctorsPage.css';
+import '../styles/FindDoctorsPage.css';
 
 export default function FindDoctorsPage() {
-  const [searchParams] = useSearchParams();
-  const initialCity = searchParams.get('city') || 'ALL';
-
-  const [doctors, setDoctors] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCity, setSelectedCity] = useState(initialCity);
-  const [selectedSpecialty, setSelectedSpecialty] = useState('ALL');
-  const [allSpecialties, setAllSpecialties] = useState([]);
-  const [viewingUser, setViewingUser] = useState(null);
-
-  // Sync if URL query param changes
-  useEffect(() => {
-    const cityParam = searchParams.get('city');
-    if (cityParam) {
-      setSelectedCity(cityParam);
-    }
-  }, [searchParams]);
-
-  const loadDoctors = useCallback(async (customSearch) => {
-    setLoading(true);
-    try {
-      const searchToUse = customSearch !== undefined ? customSearch : searchQuery;
-      const [docs, all] = await Promise.all([
-        fetchDoctors({
-          city: selectedCity === 'ALL' ? undefined : selectedCity,
-          specialty: selectedSpecialty === 'ALL' ? undefined : selectedSpecialty,
-          search: searchToUse
-        }),
-        fetchDoctors()
-      ]);
-      setDoctors(docs);
-      const dbSpecs = all.map((d) => d.specialty).filter(Boolean);
-      const combinedSpecialties = Array.from(new Set([...standardSpecialties, ...dbSpecs])).sort();
-      setAllSpecialties(combinedSpecialties);
-    } catch (err) {
-      console.error('Failed to load doctors:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedCity, selectedSpecialty, searchQuery]);
-
-  useEffect(() => {
-    loadDoctors();
-  }, [loadDoctors]);
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    loadDoctors(searchQuery);
-  };
-
-  const handleReset = () => {
-    setSearchQuery('');
-    setSelectedCity('ALL');
-    setSelectedSpecialty('ALL');
-    loadDoctors('');
-  };
-
   return (
     <div className="find-doctors-page">
       <PublicNavbar />
 
-      {/* Header Banner */}
-      <section className="find-doctors-hero">
-        <span className="section-tag">Clinical Directory</span>
-        <h1 className="find-doctors-title">Find Trusted Doctors & Specialists</h1>
-        <p className="find-doctors-subtitle">
-          Browse licensed physicians by location, medical discipline, or keyword. Review credentials and book appointment slots in real-time.
+      {/* Main Promotional & Informational Showcase Hero */}
+      <section className="find-doctors-hero" style={{ padding: '60px 24px 80px', maxWidth: '1000px' }}>
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'linear-gradient(135deg, #e0f2fe, #ccfbf1)',
+            color: '#0369a1',
+            padding: '6px 18px',
+            borderRadius: '24px',
+            fontSize: '0.88rem',
+            fontWeight: 700,
+            marginBottom: '16px',
+            border: '1px solid #bae6fd'
+          }}
+        >
+          <FaCalendarCheck style={{ color: '#0284c7' }} />
+          <span>Streamlined Medical Scheduling</span>
+        </div>
+
+        <h1 className="find-doctors-title" style={{ fontSize: '2.8rem', lineHeight: 1.25 }}>
+          Looking for booking appointment? <br />
+          <span style={{ color: '#0284c7' }}>MedBuddy Makes it all Easy</span>
+        </h1>
+
+        <p className="find-doctors-subtitle" style={{ maxWidth: '720px', fontSize: '1.15rem' }}>
+          Connect with certified specialists, select your consultation slot, and receive clinical confirmations with zero wait times. Fast, confidential, and fully digital.
         </p>
 
-        {/* Search & Filter Bar */}
-        <div className="public-doctor-search-card">
-          <form onSubmit={handleSearchSubmit} className="public-search-form">
-            <div className="public-search-input-box">
-              <FaSearch className="public-search-icon" />
-              <input
-                type="text"
-                className="input-field"
-                placeholder="Search physician name, condition, or domain..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+        {/* Feature Cards Showcase */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '24px',
+            marginTop: '40px',
+            textAlign: 'left'
+          }}
+        >
+          <div
+            style={{
+              background: '#ffffff',
+              padding: '28px',
+              borderRadius: '16px',
+              border: '1.5px solid #e2e8f0',
+              boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.05)',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+            }}
+          >
+            <div
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: '#e0f2fe',
+                color: '#0284c7',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.4rem',
+                marginBottom: '18px'
+              }}
+            >
+              <FaUserMd />
             </div>
-
-            <div className="public-filter-box">
-              <FaMapMarkerAlt style={{ color: '#0284c7' }} />
-              <select
-                className="input-field"
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                style={{ cursor: 'pointer' }}
-              >
-                <option value="ALL">All Cities</option>
-                <option value="Lahore">Lahore</option>
-                <option value="Karachi">Karachi</option>
-                <option value="Islamabad">Islamabad</option>
-                <option value="Rawalpindi">Rawalpindi</option>
-                <option value="Faisalabad">Faisalabad</option>
-                <option value="Multan">Multan</option>
-                <option value="Peshawar">Peshawar</option>
-                <option value="Quetta">Quetta</option>
-              </select>
-            </div>
-
-            <div className="public-filter-box">
-              <FaFilter style={{ color: '#0d9488' }} />
-              <select
-                className="input-field"
-                value={selectedSpecialty}
-                onChange={(e) => setSelectedSpecialty(e.target.value)}
-                style={{ cursor: 'pointer' }}
-              >
-                <option value="ALL">All Specialties</option>
-                {allSpecialties.map((spec) => (
-                  <option key={spec} value={spec}>
-                    {spec}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <button type="submit" className="public-search-btn">
-              Search
-            </button>
-
-            <button type="button" className="public-reset-btn" onClick={handleReset}>
-              Reset
-            </button>
-          </form>
-        </div>
-      </section>
-
-      {/* Doctors Grid Section */}
-      <section className="find-doctors-body">
-        <div className="find-doctors-meta-row">
-          <h3>
-            Available Practitioners{' '}
-            <span style={{ color: '#0284c7' }}>({doctors.length})</span>
-          </h3>
-          <span className="filter-pill-summary">
-            City: <strong>{selectedCity === 'ALL' ? 'All Locations' : selectedCity}</strong> | Specialty:{' '}
-            <strong>{selectedSpecialty === 'ALL' ? 'All Disciplines' : selectedSpecialty}</strong>
-          </span>
-        </div>
-
-        {loading ? (
-          <div className="doctors-loading-state">
-            <FaUserMd className="loading-spin-icon" />
-            <p>Loading practitioners from clinical database...</p>
-          </div>
-        ) : doctors.length === 0 ? (
-          <div className="doctors-empty-state">
-            <h4>No physicians found matching your search.</h4>
-            <p>
-              Try changing the location filter or searching with general terms like <strong>Cardiology</strong> or <strong>General</strong>.
+            <h3 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', color: '#0f172a', fontWeight: 800 }}>
+              Verified Medical Specialists
+            </h3>
+            <p style={{ margin: 0, fontSize: '0.92rem', color: '#64748b', lineHeight: 1.6 }}>
+              All doctors across all 21 departments are credential-checked with documented clinical experience, consultation hours, and domain expertise.
             </p>
-            <button className="auth-submit-btn" style={{ maxWidth: '180px', marginTop: '16px' }} onClick={handleReset}>
-              View All Doctors
-            </button>
           </div>
-        ) : (
-          <div className="public-doctors-grid">
-            {doctors.map((doc) => (
-              <div className="public-doc-card" key={doc.id}>
-                <div>
-                  <div className="public-doc-top">
-                    <div className="public-doc-avatar">
-                      {doc.fullName.charAt(0) || 'D'}
-                    </div>
-                    <div className="public-doc-info">
-                      <h4>{doc.fullName}</h4>
-                      <span className="public-spec-tag">{doc.specialty || 'General Practitioner'}</span>
-                      <div className="public-exp-badge">
-                        <FaStar style={{ color: '#eab308', marginRight: '4px' }} />
-                        {doc.yearsOfExperience ? `${doc.yearsOfExperience} Years Clinical Exp` : 'Licensed Physician'}
-                      </div>
-                    </div>
-                  </div>
 
-                  {doc.experienceDomain && (
-                    <div className="public-domain-snippet">
-                      <strong>Clinical Expertise: </strong>
-                      {doc.experienceDomain}
-                    </div>
-                  )}
-
-                  <ul className="public-doc-meta">
-                    <li>
-                      <FaMapMarkerAlt style={{ color: '#0284c7' }} />
-                      <span>
-                        <strong>{doc.city || 'Lahore'}</strong>, {doc.country || 'Pakistan'}
-                        {doc.clinicAddress ? ` • ${doc.clinicAddress}` : ''}
-                      </span>
-                    </li>
-                    <li>
-                      <FaPhoneAlt style={{ color: '#94a3b8' }} />
-                      <span>{doc.phone || 'Clinic line available upon booking'}</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="public-doc-actions">
-                  <Link to="/login/patient" className="doc-primary-book-btn">
-                    Book Slot
-                  </Link>
-                  <button
-                    className="doc-secondary-view-btn"
-                    onClick={() => setViewingUser(doc)}
-                  >
-                    View Credentials
-                  </button>
-                </div>
-              </div>
-            ))}
+          <div
+            style={{
+              background: '#ffffff',
+              padding: '28px',
+              borderRadius: '16px',
+              border: '1.5px solid #e2e8f0',
+              boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.05)',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+            }}
+          >
+            <div
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: '#ccfbf1',
+                color: '#0d9488',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.4rem',
+                marginBottom: '18px'
+              }}
+            >
+              <FaClock />
+            </div>
+            <h3 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', color: '#0f172a', fontWeight: 800 }}>
+              1-Hour Flexible Time Slots
+            </h3>
+            <p style={{ margin: 0, fontSize: '0.92rem', color: '#64748b', lineHeight: 1.6 }}>
+              Pick any hour that fits your schedule with smart 1-hour session tracking, conflict protection, and automatic day-part detection.
+            </p>
           </div>
-        )}
+
+          <div
+            style={{
+              background: '#ffffff',
+              padding: '28px',
+              borderRadius: '16px',
+              border: '1.5px solid #e2e8f0',
+              boxShadow: '0 8px 24px -4px rgba(15, 23, 42, 0.05)',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+            }}
+          >
+            <div
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: '#fef3c7',
+                color: '#d97706',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.4rem',
+                marginBottom: '18px'
+              }}
+            >
+              <FaHospital />
+            </div>
+            <h3 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', color: '#0f172a', fontWeight: 800 }}>
+              Nationwide Coverage
+            </h3>
+            <p style={{ margin: 0, fontSize: '0.92rem', color: '#64748b', lineHeight: 1.6 }}>
+              Full coverage across 12 major metropolitan areas including Lahore, Karachi, Islamabad, Rawalpindi, Faisalabad, Multan, and more.
+            </p>
+          </div>
+        </div>
+
+        {/* Informational Guidance Banner */}
+        <div
+          style={{
+            marginTop: '40px',
+            padding: '24px 30px',
+            background: 'linear-gradient(135deg, #f0fdfa, #f8fafc)',
+            border: '1.5px solid #ccfbf1',
+            borderRadius: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            textAlign: 'left'
+          }}
+        >
+          <div
+            style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '50%',
+              background: '#ccfbf1',
+              color: '#0d9488',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.25rem',
+              flexShrink: 0
+            }}
+          >
+            <FaShieldAlt />
+          </div>
+          <div>
+            <h4 style={{ margin: '0 0 4px 0', color: '#0f766e', fontSize: '1.05rem', fontWeight: 700 }}>
+              Confidentiality & Medical Record Security
+            </h4>
+            <p style={{ margin: 0, color: '#475569', fontSize: '0.9rem', lineHeight: 1.5 }}>
+              Physician schedules and patient appointment requests are kept completely private and secure within your verified personal portal.
+            </p>
+          </div>
+        </div>
       </section>
-
-      {/* Read-Only Modal */}
-      {viewingUser && (
-        <ProfileModal user={viewingUser} onClose={() => setViewingUser(null)} />
-      )}
 
       {/* Modern Clinical Footer */}
       <PublicFooter />

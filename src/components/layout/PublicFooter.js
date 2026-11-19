@@ -9,7 +9,7 @@ import {
   FaClock,
   FaArrowRight
 } from 'react-icons/fa';
-import './PublicFooter.css';
+import '../../styles/PublicFooter.css';
 
 export default function PublicFooter() {
   return (

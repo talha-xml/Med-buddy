@@ -4,7 +4,7 @@ import Navbar from '../../components/layout/Navbar';
 import { useAuth } from '../../context/AuthContext';
 import { FaArrowLeft, FaCheck } from 'react-icons/fa';
 import { standardSpecialties } from '../../services/clinicalData';
-import '../patient/Dashboard.css';
+import '../../styles/Dashboard.css';
 
 export default function EditProfile() {
   const { currentUser, updateProfile } = useAuth();

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/layout/Navbar';
 import { useAuth } from '../../context/AuthContext';
 import { FaUserEdit, FaArrowLeft, FaShieldAlt } from 'react-icons/fa';
-import '../patient/Dashboard.css';
+import '../../styles/Dashboard.css';
 
 export default function ViewProfile() {
   const { currentUser } = useAuth();

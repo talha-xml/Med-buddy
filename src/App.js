@@ -14,6 +14,7 @@ import PatientDashboard from './pages/patient/PatientDashboard';
 import DoctorDashboard from './pages/doctor/DoctorDashboard';
 import ViewProfile from './pages/profile/ViewProfile';
 import EditProfile from './pages/profile/EditProfile';
+import NotificationsPage from './pages/notifications/NotificationsPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import GuestRoute from './components/layout/GuestRoute';
@@ -122,6 +123,16 @@ function App() {
 
           {/* Terms and Policies */}
           <Route path="/terms" element={<Terms />} />
+
+          {/* Dedicated All Notifications Page (Protected for either logged-in Doctor or Patient) */}
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <NotificationsPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Patient Routes (Guarded: Admin & Doctor cannot access) */}
           <Route

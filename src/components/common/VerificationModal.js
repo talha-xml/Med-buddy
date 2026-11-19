@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaCheckCircle, FaExclamationTriangle, FaShieldAlt, FaTimes } from 'react-icons/fa';
 import { updateDoctorVerification, getDoctorStatus } from '../../services/verificationService';
-import './VerificationModal.css';
+import '../../styles/VerificationModal.css';
 
 export default function VerificationModal({ doctor, isOpen, onClose, onVerified }) {
   const [submitting, setSubmitting] = useState(false);

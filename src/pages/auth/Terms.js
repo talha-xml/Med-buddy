@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheckIcon, MedicalCrossIcon } from '../../components/auth/AuthLayout';
-import './Terms.css';
+import '../../styles/Terms.css';
 
 export default function Terms() {
   return (

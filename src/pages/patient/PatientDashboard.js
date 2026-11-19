@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../../components/layout/Navbar';
 import ProfileModal from '../../components/layout/ProfileModal';
 import { useAuth } from '../../context/AuthContext';
-import './Dashboard.css';
-import '../../components/layout/DangerZone.css';
+import '../../styles/Dashboard.css';
+import '../../styles/DangerZone.css';
 import {
   fetchAppointments,
   fetchDoctors,
@@ -12,12 +13,28 @@ import {
   getUserProfile
 } from '../../services/apiService';
 import { standardSpecialties, standardCities } from '../../services/clinicalData';
-import { FaSearch, FaMapMarkerAlt, FaStar, FaPhoneAlt, FaUserMd, FaStethoscope } from 'react-icons/fa';
+import { getDoctorStatus } from '../../services/verificationService';
+import {
+  FaSearch,
+  FaMapMarkerAlt,
+  FaStar,
+  FaPhoneAlt,
+  FaUserMd,
+  FaStethoscope,
+  FaExclamationTriangle,
+  FaCalendarAlt,
+  FaClock
+} from 'react-icons/fa';
 import SearchableCombobox from '../../components/common/SearchableCombobox';
+import { addNotification } from '../../services/notificationService';
 
 export default function PatientDashboard() {
   const { currentUser } = useAuth();
-  const [activeTab, setActiveTab] = useState('appointments'); // 'appointments' | 'doctors' | 'book'
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'appointments');
+  const [highlightAptId, setHighlightAptId] = useState(
+    location.state?.highlightAppointmentId || null
+  );
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [allSpecialties, setAllSpecialties] = useState([]);
@@ -37,6 +54,10 @@ export default function PatientDashboard() {
   // Read-only modal state
   const [viewingUser, setViewingUser] = useState(null);
 
+  // Styled Cancellation Confirmation Modal state
+  const [cancellingAppointment, setCancellingAppointment] = useState(null);
+  const [cancelLoading, setCancelLoading] = useState(false);
+
   // All registered doctors pool across system (for real-time booking filtering)
   const [allDoctorsPool, setAllDoctorsPool] = useState([]);
 
@@ -45,8 +66,45 @@ export default function PatientDashboard() {
   const [bookingSpecialty, setBookingSpecialty] = useState('');
   const [selectedDoctorId, setSelectedDoctorId] = useState('');
   const [bookingDate, setBookingDate] = useState('');
-  const [bookingTime, setBookingTime] = useState('09:00 AM');
+  const [bookingHour, setBookingHour] = useState('09');
+  const [bookingPeriod, setBookingPeriod] = useState('AM');
   const [bookingReason, setBookingReason] = useState('');
+
+  // Helper functions for flexible 12-hour
+  const getPeriodOfDay = (hourStr, period) => {
+    const h = parseInt(hourStr, 10);
+    let h24 = h % 12;
+    if (period === 'PM') h24 += 12;
+
+    if (h24 >= 0 && h24 < 5) return 'Midnight / Late Night';
+    if (h24 >= 5 && h24 < 12) return 'Morning';
+    if (h24 >= 12 && h24 < 17) return 'Afternoon';
+    if (h24 >= 17 && h24 < 21) return 'Evening';
+    return 'Night';
+  };
+
+  const calculateEndTime = (hourStr, period) => {
+    const h = parseInt(hourStr, 10);
+    let h24 = h % 12;
+    if (period === 'PM') h24 += 12;
+
+    // Add 1 hour session
+    const endH24 = (h24 + 1) % 24;
+    const endPeriod = endH24 >= 12 ? 'PM' : 'AM';
+    let endH12 = endH24 % 12;
+    if (endH12 === 0) endH12 = 12;
+
+    const formattedEndH = String(endH12).padStart(2, '0');
+    return `${formattedEndH}:00 ${endPeriod}`;
+  };
+
+  const getFullTimeSlotString = (hourStr, period) => {
+    const formattedH = String(parseInt(hourStr, 10) || 12).padStart(2, '0');
+    const startStr = `${formattedH}:00 ${period}`;
+    const endStr = calculateEndTime(hourStr, period);
+    const partOfDay = getPeriodOfDay(hourStr, period);
+    return `${startStr} - ${endStr} (${partOfDay})`;
+  };
 
   // Sync state whenever currentUser updates or re-loads
   useEffect(() => {
@@ -56,6 +114,20 @@ export default function PatientDashboard() {
       }
     }
   }, [currentUser]);
+
+  // Sync if navigated from notification with state
+  useEffect(() => {
+    if (location.state?.highlightAppointmentId) {
+      setHighlightAptId(location.state.highlightAppointmentId);
+      setActiveTab('appointments');
+      setTimeout(() => {
+        const el = document.getElementById(location.state.highlightAppointmentId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 350);
+    }
+  }, [location.state]);
 
   const loadData = useCallback(async () => {
     if (!currentUser) return;
@@ -71,11 +143,19 @@ export default function PatientDashboard() {
         }),
         fetchDoctors() // for listing all distinct specialties and complete doctor pool
       ]);
-      setAppointments(apts);
-      setDoctors(docList);
-      setAllDoctorsPool(allDocs);
+      // Filter out any disabled doctors so patients cannot view or book appointments with them
+      const activeDocList = docList.filter(
+        (d) => d.isEnabled !== 0 && getDoctorStatus(d.id).isEnabled !== false
+      );
+      const activeAllDocs = allDocs.filter(
+        (d) => d.isEnabled !== 0 && getDoctorStatus(d.id).isEnabled !== false
+      );
 
-      const dbSpecs = allDocs.map((d) => d.specialty).filter(Boolean);
+      setAppointments(apts);
+      setDoctors(activeDocList);
+      setAllDoctorsPool(activeAllDocs);
+
+      const dbSpecs = activeAllDocs.map((d) => d.specialty).filter(Boolean);
       const combinedSpecialties = Array.from(new Set([...standardSpecialties, ...dbSpecs])).sort();
       setAllSpecialties(combinedSpecialties);
     } catch (err) {
@@ -90,28 +170,82 @@ export default function PatientDashboard() {
   const handleBookSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
-    if (!selectedDoctorId || !bookingDate || !bookingTime || !bookingReason) {
+    const computedTimeSlot = getFullTimeSlotString(bookingHour, bookingPeriod);
+
+    if (!selectedDoctorId || !bookingDate || !bookingReason) {
       setErrorMsg('Please fill out all booking fields.');
       return;
     }
 
-    const doctor = allDoctorsPool.find((d) => d.id === selectedDoctorId) || doctors.find((d) => d.id === selectedDoctorId);
+    const doctor =
+      allDoctorsPool.find((d) => d.id === selectedDoctorId) ||
+      doctors.find((d) => d.id === selectedDoctorId);
     if (!doctor) {
       setErrorMsg('Selected doctor is not found. Please choose a doctor from the list.');
       return;
     }
 
+    // Validation: Check if time slot falls within doctor's consultation hours
+    if (doctor.availableFrom && doctor.availableTo) {
+      const parseTimeToMinutes = (tStr) => {
+        if (!tStr) return null;
+        const [timePart, period] = tStr.trim().split(' ');
+        let [h, m] = timePart.split(':').map(Number);
+        if (period === 'PM' && h !== 12) h += 12;
+        if (period === 'AM' && h === 12) h = 0;
+        return h * 60 + (m || 0);
+      };
+
+      const startMinutes = parseTimeToMinutes(`${bookingHour}:00 ${bookingPeriod}`);
+      const docFromMin = parseTimeToMinutes(doctor.availableFrom);
+      const docToMin = parseTimeToMinutes(doctor.availableTo);
+
+      if (startMinutes !== null && docFromMin !== null && docToMin !== null) {
+        if (startMinutes < docFromMin || startMinutes >= docToMin) {
+          setErrorMsg(
+            `Dr. ${doctor.fullName} is only available between ${doctor.availableFrom} and ${doctor.availableTo}. Please select a time slot within their available hours.`
+          );
+          return;
+        }
+      }
+    }
+
+    // Validation: Check if slot is already taken by an active appointment
+    const isSlotAlreadyTaken = appointments.some(
+      (apt) =>
+        apt.doctorId === doctor.id &&
+        apt.date === bookingDate &&
+        apt.time === computedTimeSlot &&
+        (apt.status === 'Pending' || apt.status === 'Confirmed')
+    );
+
+    if (isSlotAlreadyTaken) {
+      setErrorMsg(
+        `This time slot (${computedTimeSlot}) is already booked for Dr. ${doctor.fullName} on ${bookingDate}. Please choose another time slot or date.`
+      );
+      return;
+    }
+
     setLoading(true);
     try {
-      await createAppointment({
+      const createdApt = await createAppointment({
         patientId: currentUser.id,
         patientName: currentUser.fullName,
         doctorId: doctor.id,
         doctorName: doctor.fullName,
         specialty: doctor.specialty || 'General Care',
         date: bookingDate,
-        time: bookingTime,
+        time: computedTimeSlot,
         reason: bookingReason
+      });
+
+      // Send local notification backup to the respective doctor
+      addNotification({
+        userId: doctor.id,
+        title: 'New Appointment Request',
+        message: `You have a new appointment request by ${currentUser.fullName} at ${computedTimeSlot}. Please confirm the request`,
+        appointmentId: createdApt?.id || `apt-${Date.now()}`,
+        type: 'appointment_request'
       });
 
       setSuccessMsg(
@@ -120,8 +254,10 @@ export default function PatientDashboard() {
       setBookingReason('');
       setBookingDate('');
       await loadData();
-      setActiveTab('appointments');
-      setTimeout(() => setSuccessMsg(''), 5000);
+      setTimeout(() => {
+        setSuccessMsg('');
+        setActiveTab('appointments');
+      }, 2500);
     } catch (err) {
       setErrorMsg(err.message || 'Could not submit appointment booking.');
     } finally {
@@ -129,14 +265,19 @@ export default function PatientDashboard() {
     }
   };
 
-  const handleCancelAppointment = async (id) => {
-    if (window.confirm('Are you sure you want to cancel this appointment?')) {
-      try {
-        await updateAppointmentStatus(id, 'Cancelled');
-        await loadData();
-      } catch (err) {
-        alert(err.message || 'Error cancelling appointment.');
-      }
+  const handleConfirmCancel = async () => {
+    if (!cancellingAppointment) return;
+    setCancelLoading(true);
+    try {
+      await updateAppointmentStatus(cancellingAppointment.id, 'Cancelled');
+      setSuccessMsg('Appointment cancelled successfully.');
+      setCancellingAppointment(null);
+      await loadData();
+      setTimeout(() => setSuccessMsg(''), 4000);
+    } catch (err) {
+      setErrorMsg(err.message || 'Error cancelling appointment.');
+    } finally {
+      setCancelLoading(false);
     }
   };
 
@@ -190,8 +331,8 @@ export default function PatientDashboard() {
             </div>
           </div>
 
-          {successMsg && <div className="success-banner">{successMsg}</div>}
-          {errorMsg && <div className="auth-error-alert">{errorMsg}</div>}
+          {activeTab !== 'book' && successMsg && <div className="success-banner">{successMsg}</div>}
+          {activeTab !== 'book' && errorMsg && <div className="auth-error-alert">{errorMsg}</div>}
 
           {/* Quick Metrics */}
           <div className="stat-cards-grid">
@@ -236,9 +377,6 @@ export default function PatientDashboard() {
                   <h3 className="card-section-title" style={{ margin: 0 }}>
                     Your Scheduled Consultations
                   </h3>
-                  <button className="action-btn-sm" onClick={() => setActiveTab('book')}>
-                    + New Booking
-                  </button>
                 </div>
 
                 {/* Controls: Search Doctor by Name & Status Filter */}
@@ -321,9 +459,9 @@ export default function PatientDashboard() {
                       <button
                         className="auth-submit-btn"
                         style={{ maxWidth: '220px', margin: '0 auto' }}
-                        onClick={() => setActiveTab('book')}
+                        onClick={() => setActiveTab('doctors')}
                       >
-                        Book Your First Appointment
+                        Find Doctors
                       </button>
                     </>
                   ) : (
@@ -336,56 +474,76 @@ export default function PatientDashboard() {
                 </div>
               ) : (
                 <div className="appointment-grid">
-                  {filteredAppointments.map((apt) => (
-                    <div className="appointment-item" key={apt.id}>
-                      <div className="apt-left">
-                        <div className="apt-calendar-badge">
-                          <div className="date-day">{apt.date.split('-')[2] || '📅'}</div>
-                          <div className="date-sub">{apt.date}</div>
+                  {filteredAppointments.map((apt) => {
+                    const isHighlighted = highlightAptId === apt.id;
+                    return (
+                      <div
+                        id={apt.id}
+                        className={`appointment-item ${isHighlighted ? 'highlighted-item' : ''}`}
+                        key={apt.id}
+                        style={
+                          isHighlighted
+                            ? {
+                                border: '2px solid #0284c7',
+                                backgroundColor: '#f0f9ff',
+                                boxShadow: '0 6px 18px rgba(2, 132, 199, 0.15)'
+                              }
+                            : {}
+                        }
+                      >
+                        <div className="apt-left">
+                          <div className="apt-calendar-badge">
+                            <div className="date-day">
+                              {apt.date.split('-')[2] || (
+                                <FaCalendarAlt style={{ fontSize: '1rem', marginTop: '4px' }} />
+                              )}
+                            </div>
+                            <div className="date-sub">{apt.date}</div>
+                          </div>
+                          <div className="apt-details">
+                            <h4>
+                              <span
+                                className="clickable-name"
+                                title="Click to view doctor credentials"
+                                onClick={() => handleViewDoctorProfile(apt.doctorId)}
+                              >
+                                {apt.doctorName}
+                              </span>
+                            </h4>
+                            <p>
+                              <strong>Specialty:</strong> {apt.specialty} | <strong>Time:</strong>{' '}
+                              {apt.time}
+                            </p>
+                            <p style={{ marginTop: '4px' }}>
+                              <strong>Reason:</strong> {apt.reason}
+                            </p>
+                          </div>
                         </div>
-                        <div className="apt-details">
-                          <h4>
-                            <span
-                              className="clickable-name"
-                              title="Click to view doctor credentials"
-                              onClick={() => handleViewDoctorProfile(apt.doctorId)}
-                            >
-                              {apt.doctorName}
-                            </span>
-                          </h4>
-                          <p>
-                            <strong>Specialty:</strong> {apt.specialty} | <strong>Time:</strong>{' '}
-                            {apt.time}
-                          </p>
-                          <p style={{ marginTop: '4px' }}>
-                            <strong>Reason:</strong> {apt.reason}
-                          </p>
-                        </div>
-                      </div>
 
-                      <div className="apt-right">
-                        <button
-                          className="action-btn-sm"
-                          style={{ fontSize: '0.8rem' }}
-                          onClick={() => handleViewDoctorProfile(apt.doctorId)}
-                        >
-                          View Dr Profile
-                        </button>
-
-                        <span className={`status-pill ${apt.status.toLowerCase()}`}>
-                          {apt.status}
-                        </span>
-                        {apt.status !== 'Cancelled' && (
+                        <div className="apt-right">
                           <button
-                            className="action-btn-sm cancel"
-                            onClick={() => handleCancelAppointment(apt.id)}
+                            className="action-btn-sm"
+                            style={{ fontSize: '0.8rem' }}
+                            onClick={() => handleViewDoctorProfile(apt.doctorId)}
                           >
-                            Cancel
+                            View Dr Profile
                           </button>
-                        )}
+
+                          <span className={`status-pill ${apt.status.toLowerCase()}`}>
+                            {apt.status}
+                          </span>
+                          {apt.status !== 'Cancelled' && (
+                            <button
+                              className="action-btn-sm cancel"
+                              onClick={() => setCancellingAppointment(apt)}
+                            >
+                              Cancel
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -493,10 +651,6 @@ export default function PatientDashboard() {
                       </strong>
                     </p>
                   </div>
-
-                  <button className="action-btn-sm" onClick={() => setActiveTab('book')}>
-                    + Book Slot Directly
-                  </button>
                 </div>
 
                 {doctors.length === 0 ? (
@@ -557,6 +711,23 @@ export default function PatientDashboard() {
                                 {doc.clinicAddress ? ` • ${doc.clinicAddress}` : ''}
                               </span>
                             </li>
+                            <li
+                              style={{
+                                color: '#0d9488',
+                                fontWeight: 600,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px'
+                              }}
+                            >
+                              <FaClock style={{ color: '#0d9488', flexShrink: 0 }} />
+                              <span>
+                                Hours:{' '}
+                                {doc.availableFrom && doc.availableTo
+                                  ? `${doc.availableFrom} - ${doc.availableTo}`
+                                  : '09:00 AM - 05:00 PM'}
+                              </span>
+                            </li>
                             <li>
                               <FaPhoneAlt style={{ color: '#94a3b8' }} />
                               <span>{doc.phone || 'Available upon booking'}</span>
@@ -592,365 +763,616 @@ export default function PatientDashboard() {
           )}
 
           {/* Tab 3: Book Appointment Form */}
-          {activeTab === 'book' && (() => {
-            // Real-time dynamic doctor filtering based on Location, Specialty, and Doctor search inputs
-            const matchingDoctors = allDoctorsPool.filter((doc) => {
-              if (bookingCity && bookingCity !== 'ALL') {
-                if ((doc.city || '').toLowerCase().trim() !== bookingCity.toLowerCase().trim()) {
-                  return false;
+          {activeTab === 'book' &&
+            (() => {
+              // Real-time dynamic doctor filtering based on Location, Specialty, and Doctor search inputs
+              const matchingDoctors = allDoctorsPool.filter((doc) => {
+                if (bookingCity && bookingCity !== 'ALL') {
+                  if ((doc.city || '').toLowerCase().trim() !== bookingCity.toLowerCase().trim()) {
+                    return false;
+                  }
                 }
-              }
-              if (bookingSpecialty && bookingSpecialty !== 'ALL') {
-                if ((doc.specialty || '').toLowerCase().trim() !== bookingSpecialty.toLowerCase().trim()) {
-                  return false;
+                if (bookingSpecialty && bookingSpecialty !== 'ALL') {
+                  if (
+                    (doc.specialty || '').toLowerCase().trim() !==
+                    bookingSpecialty.toLowerCase().trim()
+                  ) {
+                    return false;
+                  }
                 }
-              }
-              return true;
-            });
+                return true;
+              });
 
-            // City dropdown options (standard cities + any in database)
-            const availableCities = Array.from(
-              new Set([...standardCities, ...allDoctorsPool.map((d) => d.city).filter(Boolean)])
-            );
-            const cityOptions = [
-              { value: 'ALL', label: 'All Locations (Nationwide)', subLabel: 'Show doctors across all cities' },
-              ...availableCities.map((c) => ({
-                value: c,
-                label: c,
-                subLabel: 'Pakistan'
-              }))
-            ];
+              // City dropdown options (standard cities + any in database)
+              const availableCities = Array.from(
+                new Set([...standardCities, ...allDoctorsPool.map((d) => d.city).filter(Boolean)])
+              );
+              const cityOptions = [
+                {
+                  value: 'ALL',
+                  label: 'All Locations (Nationwide)',
+                  subLabel: 'Show doctors across all cities'
+                },
+                ...availableCities.map((c) => ({
+                  value: c,
+                  label: c,
+                  subLabel: 'Pakistan'
+                }))
+              ];
 
-            // Specialty options
-            const specialtyOptions = [
-              { value: 'ALL', label: 'All Specialties', subLabel: 'Any medical field' },
-              ...allSpecialties.map((s) => ({
-                value: s,
-                label: s,
-                subLabel: 'Medical Specialty'
-              }))
-            ];
+              // Specialty options
+              const specialtyOptions = [
+                { value: 'ALL', label: 'All Specialties', subLabel: 'Any medical field' },
+                ...allSpecialties.map((s) => ({
+                  value: s,
+                  label: s,
+                  subLabel: 'Medical Specialty'
+                }))
+              ];
 
-            // Matching doctors as combobox options
-            const doctorOptions = matchingDoctors.map((doc) => ({
-              value: doc.id,
-              label: doc.fullName,
-              subLabel: `${doc.specialty || 'General Care'} • ${doc.city || 'City N/A'} • ${doc.yearsOfExperience ? `${doc.yearsOfExperience} yrs exp` : 'Licensed'}`
-            }));
+              // Matching doctors as combobox options
+              const doctorOptions = matchingDoctors.map((doc) => ({
+                value: doc.id,
+                label: doc.fullName,
+                subLabel: `${doc.specialty || 'General Care'} • ${
+                  doc.city || 'City N/A'
+                } • Hours: ${
+                  doc.availableFrom && doc.availableTo
+                    ? `${doc.availableFrom} - ${doc.availableTo}`
+                    : '09:00 AM - 05:00 PM'
+                }`
+              }));
 
-            // Currently selected doctor object
-            const currentSelectedDoctor = allDoctorsPool.find((d) => d.id === selectedDoctorId);
+              // Currently selected doctor object
+              const currentSelectedDoctor = allDoctorsPool.find((d) => d.id === selectedDoctorId);
 
-            return (
-              <div className="booking-form-box">
-                <div className="card-section-header">
-                  <div>
-                    <h3 className="card-section-title">Reserve a Medical Consultation Slot</h3>
-                    <p style={{ margin: '4px 0 0 0', fontSize: '0.88rem', color: '#64748b' }}>
-                      Filter by Location and Medical Specialty to view matching licensed physicians in real time.
-                    </p>
+              return (
+                <div className="booking-form-box">
+                  <div className="card-section-header">
+                    <div>
+                      <h3 className="card-section-title">Reserve a Medical Consultation Slot</h3>
+                      <p style={{ margin: '4px 0 0 0', fontSize: '0.88rem', color: '#64748b' }}>
+                        Filter by Location and Medical Specialty to view matching licensed
+                        physicians in real time.
+                      </p>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span
+                        style={{
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          color: matchingDoctors.length > 0 ? '#0d9488' : '#e11d48',
+                          background: matchingDoctors.length > 0 ? '#ccfbf1' : '#ffe4e6',
+                          padding: '4px 12px',
+                          borderRadius: '20px'
+                        }}
+                      >
+                        {matchingDoctors.length}{' '}
+                        {matchingDoctors.length === 1 ? 'Doctor' : 'Doctors'} Available
+                      </span>
+                    </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span
-                      style={{
-                        fontSize: '0.82rem',
-                        fontWeight: 700,
-                        color: matchingDoctors.length > 0 ? '#0d9488' : '#e11d48',
-                        background: matchingDoctors.length > 0 ? '#ccfbf1' : '#ffe4e6',
-                        padding: '4px 12px',
-                        borderRadius: '20px'
-                      }}
+                  <form onSubmit={handleBookSubmit}>
+                    {/* Row 1: Separate Location, Specialty, and Doctor Name with Search + Dropdown */}
+                    <div
+                      className="booking-grid"
+                      style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}
                     >
-                      {matchingDoctors.length} {matchingDoctors.length === 1 ? 'Doctor' : 'Doctors'} Available
-                    </span>
-                  </div>
-                </div>
-
-                <form onSubmit={handleBookSubmit}>
-                  {/* Row 1: Separate Location, Specialty, and Doctor Name with Search + Dropdown */}
-                  <div className="booking-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
-                    {/* 1. Location / City */}
-                    <div className="form-group">
-                      <label>1. Location / City</label>
-                      <SearchableCombobox
-                        icon={<FaMapMarkerAlt />}
-                        placeholder="Search city e.g. Lahore..."
-                        options={cityOptions}
-                        value={bookingCity}
-                        onChange={(newCity) => {
-                          setBookingCity(newCity);
-                          // If current selected doctor doesn't match new city, clear or auto-select
-                          if (selectedDoctorId) {
-                            const stillValid = allDoctorsPool.some(
-                              (d) =>
-                                d.id === selectedDoctorId &&
-                                (!newCity || newCity === 'ALL' || (d.city || '').toLowerCase() === newCity.toLowerCase())
-                            );
-                            if (!stillValid) setSelectedDoctorId('');
-                          }
-                        }}
-                      />
-                    </div>
-
-                    {/* 2. Medical Specialty */}
-                    <div className="form-group">
-                      <label>2. Medical Specialty</label>
-                      <SearchableCombobox
-                        icon={<FaStethoscope />}
-                        placeholder="Search specialty e.g. Cardiology..."
-                        options={specialtyOptions}
-                        value={bookingSpecialty}
-                        onChange={(newSpec) => {
-                          setBookingSpecialty(newSpec);
-                          // If current selected doctor doesn't match new specialty, clear
-                          if (selectedDoctorId) {
-                            const stillValid = allDoctorsPool.some(
-                              (d) =>
-                                d.id === selectedDoctorId &&
-                                (!newSpec || newSpec === 'ALL' || (d.specialty || '').toLowerCase() === newSpec.toLowerCase())
-                            );
-                            if (!stillValid) setSelectedDoctorId('');
-                          }
-                        }}
-                      />
-                    </div>
-
-                    {/* 3. Name of Doctor */}
-                    <div className="form-group">
-                      <label>3. Physician / Doctor Name</label>
-                      <SearchableCombobox
-                        icon={<FaUserMd />}
-                        placeholder={
-                          matchingDoctors.length > 0
-                            ? 'Search doctor by name...'
-                            : 'No doctors match current filters'
-                        }
-                        options={doctorOptions}
-                        value={selectedDoctorId}
-                        onChange={(newDocId) => {
-                          setSelectedDoctorId(newDocId);
-                          // Auto sync city and specialty if selected directly from doctor dropdown
-                          const docObj = allDoctorsPool.find((d) => d.id === newDocId);
-                          if (docObj) {
-                            if (docObj.city) setBookingCity(docObj.city);
-                            if (docObj.specialty) setBookingSpecialty(docObj.specialty);
-                          }
-                        }}
-                        emptyText="No matching doctor for current filters"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  {/* Real-time Matching Doctors Quick Selector Bar */}
-                  <div className="booking-live-matches-card">
-                    <div className="booking-live-matches-header">
-                      <div className="booking-live-matches-title">
-                        <FaSearch style={{ color: '#0284c7' }} />
-                        <span>Matching Doctors ({matchingDoctors.length})</span>
+                      {/* 1. Location / City */}
+                      <div className="form-group">
+                        <label>1. Location / City</label>
+                        <SearchableCombobox
+                          icon={<FaMapMarkerAlt />}
+                          placeholder="Search city e.g. Lahore..."
+                          options={cityOptions}
+                          value={bookingCity}
+                          onChange={(newCity) => {
+                            setBookingCity(newCity);
+                            // If current selected doctor doesn't match new city, clear or auto-select
+                            if (selectedDoctorId) {
+                              const stillValid = allDoctorsPool.some(
+                                (d) =>
+                                  d.id === selectedDoctorId &&
+                                  (!newCity ||
+                                    newCity === 'ALL' ||
+                                    (d.city || '').toLowerCase() === newCity.toLowerCase())
+                              );
+                              if (!stillValid) setSelectedDoctorId('');
+                            }
+                          }}
+                        />
                       </div>
-                      {(bookingCity || bookingSpecialty) && (
+
+                      {/* 2. Medical Specialty */}
+                      <div className="form-group">
+                        <label>2. Medical Specialty</label>
+                        <SearchableCombobox
+                          icon={<FaStethoscope />}
+                          placeholder="Search specialty e.g. Cardiology..."
+                          options={specialtyOptions}
+                          value={bookingSpecialty}
+                          onChange={(newSpec) => {
+                            setBookingSpecialty(newSpec);
+                            // If current selected doctor doesn't match new specialty, clear
+                            if (selectedDoctorId) {
+                              const stillValid = allDoctorsPool.some(
+                                (d) =>
+                                  d.id === selectedDoctorId &&
+                                  (!newSpec ||
+                                    newSpec === 'ALL' ||
+                                    (d.specialty || '').toLowerCase() === newSpec.toLowerCase())
+                              );
+                              if (!stillValid) setSelectedDoctorId('');
+                            }
+                          }}
+                        />
+                      </div>
+
+                      {/* 3. Name of Doctor */}
+                      <div className="form-group">
+                        <label>3. Physician / Doctor Name</label>
+                        <SearchableCombobox
+                          icon={<FaUserMd />}
+                          placeholder={
+                            matchingDoctors.length > 0
+                              ? 'Search doctor by name...'
+                              : 'No doctors match current filters'
+                          }
+                          options={doctorOptions}
+                          value={selectedDoctorId}
+                          onChange={(newDocId) => {
+                            setSelectedDoctorId(newDocId);
+                            // Auto sync city and specialty if selected directly from doctor dropdown
+                            const docObj = allDoctorsPool.find((d) => d.id === newDocId);
+                            if (docObj) {
+                              if (docObj.city) setBookingCity(docObj.city);
+                              if (docObj.specialty) setBookingSpecialty(docObj.specialty);
+                            }
+                          }}
+                          emptyText="No matching doctor for current filters"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    {/* Highlight Selected Doctor Preview */}
+                    {currentSelectedDoctor && (
+                      <div className="booking-selected-doctor-summary">
+                        <div className="booking-selected-doctor-info">
+                          <div className="booking-selected-doctor-avatar">
+                            {currentSelectedDoctor.fullName.charAt(0)}
+                          </div>
+                          <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <strong style={{ fontSize: '0.98rem', color: '#0f172a' }}>
+                                {currentSelectedDoctor.fullName}
+                              </strong>
+                              <span
+                                className="directory-spec-badge"
+                                style={{ fontSize: '0.78rem' }}
+                              >
+                                {currentSelectedDoctor.specialty || 'General Care'}
+                              </span>
+                            </div>
+                            <p
+                              style={{ margin: '3px 0 0 0', fontSize: '0.82rem', color: '#475569' }}
+                            >
+                              <FaMapMarkerAlt style={{ color: '#0284c7', marginRight: '4px' }} />
+                              {currentSelectedDoctor.city || 'City N/A'},{' '}
+                              {currentSelectedDoctor.country || 'Pakistan'}
+                              {currentSelectedDoctor.experienceDomain
+                                ? ` • ${currentSelectedDoctor.experienceDomain}`
+                                : ''}
+                            </p>
+                            <p
+                              style={{
+                                margin: '4px 0 0 0',
+                                fontSize: '0.84rem',
+                                color: '#0d9488',
+                                fontWeight: 600,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px'
+                              }}
+                            >
+                              <FaClock style={{ color: '#0d9488', flexShrink: 0 }} />
+                              <span>
+                                Daily Consultation Hours:{' '}
+                                {currentSelectedDoctor.availableFrom &&
+                                currentSelectedDoctor.availableTo
+                                  ? `${currentSelectedDoctor.availableFrom} - ${currentSelectedDoctor.availableTo}`
+                                  : '09:00 AM - 05:00 PM'}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
                         <button
                           type="button"
-                          className="search-reset-btn"
-                          style={{ padding: '3px 10px', fontSize: '0.8rem' }}
-                          onClick={() => {
-                            setBookingCity('');
-                            setBookingSpecialty('');
-                            setSelectedDoctorId('');
-                          }}
+                          className="directory-view-btn"
+                          style={{ padding: '6px 12px', fontSize: '0.82rem' }}
+                          onClick={() => handleViewDoctorProfile(currentSelectedDoctor.id)}
                         >
-                          Clear Filters
+                          View Profile
                         </button>
-                      )}
+                      </div>
+                    )}
+
+                    {/* Row 2: Date & Flexible Time Slot with 1-Hour Auto Duration & Day Part Indicator */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '20px',
+                        alignItems: 'flex-start',
+                        marginTop: '20px'
+                      }}
+                    >
+                      {/* Preferred Date with reduced, neat width */}
+                      <div className="form-group" style={{ width: '220px', flexShrink: 0 }}>
+                        <label>Preferred Date</label>
+                        <input
+                          type="date"
+                          className="input-field"
+                          style={{ paddingLeft: '14px', width: '100%' }}
+                          value={bookingDate}
+                          onChange={(e) => setBookingDate(e.target.value)}
+                          min={new Date().toISOString().split('T')[0]}
+                          required
+                        />
+                      </div>
+
+                      {/* Appointment Start Time (Hour + AM/PM dropdowns) */}
+                      <div className="form-group" style={{ width: '260px', flexShrink: 0 }}>
+                        <label>Appointment Start Time</label>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                          {/* Hour Dropdown (1 to 12) */}
+                          <div style={{ flex: 1 }}>
+                            <select
+                              className="input-field"
+                              style={{ paddingLeft: '12px' }}
+                              value={bookingHour}
+                              onChange={(e) => setBookingHour(e.target.value)}
+                              required
+                            >
+                              {Array.from({ length: 12 }, (_, i) => {
+                                const val = String(i + 1).padStart(2, '0');
+                                return (
+                                  <option key={val} value={val}>
+                                    {val}:00
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          </div>
+
+                          {/* AM/PM Dropdown */}
+                          <div style={{ width: '90px' }}>
+                            <select
+                              className="input-field"
+                              style={{
+                                paddingLeft: '12px',
+                                fontWeight: 600,
+                                color: 'var(--primary)'
+                              }}
+                              value={bookingPeriod}
+                              onChange={(e) => setBookingPeriod(e.target.value)}
+                              required
+                            >
+                              <option value="AM">AM</option>
+                              <option value="PM">PM</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    {matchingDoctors.length === 0 ? (
-                      <div style={{ fontSize: '0.88rem', color: '#64748b', padding: '10px 0' }}>
-                        No registered doctor matches <strong>{bookingCity ? (bookingCity === 'ALL' ? 'All Cities' : bookingCity) : 'selected city'}</strong> and{' '}
-                        <strong>{bookingSpecialty ? (bookingSpecialty === 'ALL' ? 'All Specialties' : bookingSpecialty) : 'selected specialty'}</strong>.
-                        Try clearing or changing the filters above.
-                      </div>
-                    ) : (
+                    {/* Real-time Session Duration & Day-Part Indicator Badge */}
+                    <div
+                      style={{
+                        marginTop: '12px',
+                        padding: '10px 14px',
+                        backgroundColor: '#f0fdfa',
+                        border: '1.5px solid #ccfbf1',
+                        borderRadius: '10px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '8px'
+                      }}
+                    >
                       <div
                         style={{
                           display: 'flex',
-                          gap: '10px',
-                          overflowX: 'auto',
-                          padding: '6px 2px 8px'
+                          alignItems: 'center',
+                          gap: '8px',
+                          fontSize: '0.9rem',
+                          color: '#0f766e'
                         }}
                       >
-                        {matchingDoctors.map((doc) => {
-                          const isSelected = doc.id === selectedDoctorId;
-                          return (
-                            <div
-                              key={doc.id}
-                              onClick={() => setSelectedDoctorId(doc.id)}
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                                padding: '8px 14px',
-                                borderRadius: '10px',
-                                border: isSelected ? '2px solid #0284c7' : '1.5px solid #cbd5e1',
-                                background: isSelected ? '#eff6ff' : '#ffffff',
-                                cursor: 'pointer',
-                                transition: 'all 0.15s ease',
-                                flexShrink: 0
-                              }}
-                            >
-                              <div
-                                style={{
-                                  width: '32px',
-                                  height: '32px',
-                                  borderRadius: '8px',
-                                  background: isSelected ? '#0284c7' : '#e2e8f0',
-                                  color: isSelected ? '#ffffff' : '#334155',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  fontWeight: 700,
-                                  fontSize: '0.85rem'
-                                }}
-                              >
-                                {doc.fullName.charAt(0) || 'D'}
-                              </div>
-                              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span
-                                  style={{
-                                    fontSize: '0.88rem',
-                                    fontWeight: isSelected ? 700 : 600,
-                                    color: '#0f172a'
-                                  }}
-                                >
-                                  {doc.fullName}
-                                </span>
-                                <span style={{ fontSize: '0.76rem', color: '#64748b' }}>
-                                  {doc.specialty || 'General Care'} • {doc.city || 'City N/A'}
-                                </span>
-                              </div>
-                              {isSelected && (
-                                <span style={{ color: '#0284c7', fontWeight: 800, fontSize: '0.85rem' }}>
-                                  ✓
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })}
+                        <span style={{ fontWeight: 600 }}>Scheduled Slot:</span>
+                        <strong style={{ color: '#0d9488' }}>
+                          {bookingHour}:00 {bookingPeriod} →{' '}
+                          {calculateEndTime(bookingHour, bookingPeriod)}
+                        </strong>
+                        <span
+                          style={{
+                            fontSize: '0.82rem',
+                            color: '#0284c7',
+                            background: '#e0f2fe',
+                            padding: '2px 8px',
+                            borderRadius: '12px',
+                            fontWeight: 600
+                          }}
+                        >
+                          1-Hour Consultation
+                        </span>
                       </div>
-                    )}
-                  </div>
 
-                  {/* Highlight Selected Doctor Preview */}
-                  {currentSelectedDoctor && (
-                    <div className="booking-selected-doctor-summary">
-                      <div className="booking-selected-doctor-info">
-                        <div className="booking-selected-doctor-avatar">
-                          {currentSelectedDoctor.fullName.charAt(0)}
-                        </div>
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <strong style={{ fontSize: '0.98rem', color: '#0f172a' }}>
-                              {currentSelectedDoctor.fullName}
-                            </strong>
-                            <span className="directory-spec-badge" style={{ fontSize: '0.78rem' }}>
-                              {currentSelectedDoctor.specialty || 'General Care'}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontSize: '0.82rem', color: '#64748b' }}>
+                          Detected Period:
+                        </span>
+                        <span
+                          style={{
+                            fontSize: '0.82rem',
+                            fontWeight: 700,
+                            padding: '3px 10px',
+                            borderRadius: '12px',
+                            backgroundColor:
+                              getPeriodOfDay(bookingHour, bookingPeriod) === 'Morning'
+                                ? '#fef3c7'
+                                : getPeriodOfDay(bookingHour, bookingPeriod) === 'Afternoon'
+                                ? '#ffedd5'
+                                : getPeriodOfDay(bookingHour, bookingPeriod) === 'Evening'
+                                ? '#e0e7ff'
+                                : '#f1f5f9',
+                            color:
+                              getPeriodOfDay(bookingHour, bookingPeriod) === 'Morning'
+                                ? '#b45309'
+                                : getPeriodOfDay(bookingHour, bookingPeriod) === 'Afternoon'
+                                ? '#c2410c'
+                                : getPeriodOfDay(bookingHour, bookingPeriod) === 'Evening'
+                                ? '#4338ca'
+                                : '#334155'
+                          }}
+                        >
+                          {getPeriodOfDay(bookingHour, bookingPeriod)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Real-time Conflict or Availability Warning Alert Banner */}
+                    {(() => {
+                      if (!currentSelectedDoctor) return null;
+                      const computedSlot = getFullTimeSlotString(bookingHour, bookingPeriod);
+
+                      // Check if slot already taken
+                      const conflictApt = appointments.find(
+                        (apt) =>
+                          apt.doctorId === currentSelectedDoctor.id &&
+                          apt.date === bookingDate &&
+                          apt.time === computedSlot &&
+                          (apt.status === 'Pending' || apt.status === 'Confirmed')
+                      );
+
+                      if (conflictApt) {
+                        return (
+                          <div
+                            style={{
+                              marginTop: '12px',
+                              padding: '10px 14px',
+                              background: '#fef2f2',
+                              border: '1.5px solid #fecaca',
+                              borderRadius: '10px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                              color: '#b91c1c',
+                              fontSize: '0.88rem',
+                              fontWeight: 600
+                            }}
+                          >
+                            <FaExclamationTriangle
+                              style={{ flexShrink: 0, fontSize: '1rem', color: '#dc2626' }}
+                            />
+                            <span>
+                              <strong>Slot Already Filled:</strong> Dr.{' '}
+                              {currentSelectedDoctor.fullName} is already booked for this exact slot
+                              ({computedSlot}) on {bookingDate}. Please pick another hour or date.
                             </span>
                           </div>
-                          <p style={{ margin: '3px 0 0 0', fontSize: '0.82rem', color: '#475569' }}>
-                            <FaMapMarkerAlt style={{ color: '#0284c7', marginRight: '4px' }} />
-                            {currentSelectedDoctor.city || 'City N/A'}, {currentSelectedDoctor.country || 'Pakistan'}
-                            {currentSelectedDoctor.experienceDomain ? ` • ${currentSelectedDoctor.experienceDomain}` : ''}
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        className="directory-view-btn"
-                        style={{ padding: '6px 12px', fontSize: '0.82rem' }}
-                        onClick={() => handleViewDoctorProfile(currentSelectedDoctor.id)}
-                      >
-                        View Profile
-                      </button>
-                    </div>
-                  )}
+                        );
+                      }
 
-                  {/* Row 2: Date & Time Slot (Standard fields) */}
-                  <div className="booking-grid" style={{ marginTop: '20px' }}>
-                    <div className="form-group">
-                      <label>Preferred Date</label>
-                      <input
-                        type="date"
+                      // Check if outside doctor available consultation hours
+                      if (
+                        currentSelectedDoctor.availableFrom &&
+                        currentSelectedDoctor.availableTo
+                      ) {
+                        const parseTimeToMinutes = (tStr) => {
+                          if (!tStr) return null;
+                          const [timePart, period] = tStr.trim().split(' ');
+                          let [h, m] = timePart.split(':').map(Number);
+                          if (period === 'PM' && h !== 12) h += 12;
+                          if (period === 'AM' && h === 12) h = 0;
+                          return h * 60 + (m || 0);
+                        };
+
+                        const startMin = parseTimeToMinutes(`${bookingHour}:00 ${bookingPeriod}`);
+                        const fromMin = parseTimeToMinutes(currentSelectedDoctor.availableFrom);
+                        const toMin = parseTimeToMinutes(currentSelectedDoctor.availableTo);
+
+                        if (startMin !== null && fromMin !== null && toMin !== null) {
+                          if (startMin < fromMin || startMin >= toMin) {
+                            return (
+                              <div
+                                style={{
+                                  marginTop: '12px',
+                                  padding: '10px 14px',
+                                  background: '#fffbeb',
+                                  border: '1.5px solid #fde68a',
+                                  borderRadius: '10px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '10px',
+                                  color: '#92400e',
+                                  fontSize: '0.88rem',
+                                  fontWeight: 600
+                                }}
+                              >
+                                <FaExclamationTriangle
+                                  style={{ flexShrink: 0, fontSize: '1rem', color: '#d97706' }}
+                                />
+                                <span>
+                                  <strong>Outside Consultation Hours:</strong> Dr.{' '}
+                                  {currentSelectedDoctor.fullName} is available between{' '}
+                                  {currentSelectedDoctor.availableFrom} and{' '}
+                                  {currentSelectedDoctor.availableTo}. Please select a time slot
+                                  within their clinic schedule.
+                                </span>
+                              </div>
+                            );
+                          }
+                        }
+                      }
+
+                      return null;
+                    })()}
+
+                    {/* Consultation Reason */}
+                    <div className="form-group" style={{ marginTop: '16px' }}>
+                      <label>Symptoms / Consultation Reason</label>
+                      <textarea
+                        rows={3}
                         className="input-field"
-                        style={{ paddingLeft: '14px' }}
-                        value={bookingDate}
-                        onChange={(e) => setBookingDate(e.target.value)}
-                        min={new Date().toISOString().split('T')[0]}
+                        style={{ paddingLeft: '14px', resize: 'vertical' }}
+                        placeholder="Briefly describe the reason for your visit (e.g. routine checkup, persistent chest cough, fever)..."
+                        value={bookingReason}
+                        onChange={(e) => setBookingReason(e.target.value)}
                         required
                       />
                     </div>
 
-                    <div className="form-group">
-                      <label>Time Slot</label>
-                      <select
-                        className="input-field"
-                        style={{ paddingLeft: '14px' }}
-                        value={bookingTime}
-                        onChange={(e) => setBookingTime(e.target.value)}
-                        required
+                    {/* In-Form Booking Error or Success Alert (Right above action buttons for optimal UX) */}
+                    {errorMsg && (
+                      <div
+                        className="auth-error-alert"
+                        style={{
+                          marginTop: '16px',
+                          marginBottom: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px'
+                        }}
                       >
-                        <option value="09:00 AM">09:00 AM - Morning</option>
-                        <option value="10:00 AM">10:00 AM - Morning</option>
-                        <option value="11:30 AM">11:30 AM - Morning</option>
-                        <option value="02:00 PM">02:00 PM - Afternoon</option>
-                        <option value="03:30 PM">03:30 PM - Afternoon</option>
-                        <option value="04:30 PM">04:30 PM - Late Afternoon</option>
-                      </select>
+                        <FaExclamationTriangle style={{ flexShrink: 0, fontSize: '1rem' }} />
+                        <span>{errorMsg}</span>
+                      </div>
+                    )}
+                    {successMsg && (
+                      <div
+                        className="success-banner"
+                        style={{ marginTop: '16px', marginBottom: '4px' }}
+                      >
+                        {successMsg}
+                      </div>
+                    )}
+
+                    {/* Submit Button */}
+                    <div style={{ marginTop: '16px', display: 'flex', gap: '12px' }}>
+                      <button
+                        type="submit"
+                        className="auth-submit-btn"
+                        style={{ maxWidth: '240px' }}
+                        disabled={loading || !selectedDoctorId}
+                      >
+                        {loading ? 'Submitting...' : 'Confirm & Book Slot'}
+                      </button>
+                      <button
+                        type="button"
+                        className="action-btn-sm"
+                        onClick={() => setActiveTab('appointments')}
+                      >
+                        Cancel
+                      </button>
                     </div>
-                  </div>
-
-                  {/* Consultation Reason */}
-                  <div className="form-group" style={{ marginTop: '16px' }}>
-                    <label>Symptoms / Consultation Reason</label>
-                    <textarea
-                      rows={3}
-                      className="input-field"
-                      style={{ paddingLeft: '14px', resize: 'vertical' }}
-                      placeholder="Briefly describe the reason for your visit (e.g. routine checkup, persistent chest cough, fever)..."
-                      value={bookingReason}
-                      onChange={(e) => setBookingReason(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div style={{ marginTop: '20px', display: 'flex', gap: '12px' }}>
-                    <button
-                      type="submit"
-                      className="auth-submit-btn"
-                      style={{ maxWidth: '240px' }}
-                      disabled={loading || !selectedDoctorId}
-                    >
-                      {loading ? 'Submitting...' : 'Confirm & Book Slot'}
-                    </button>
-                    <button
-                      type="button"
-                      className="action-btn-sm"
-                      onClick={() => setActiveTab('appointments')}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
-            );
-          })()}
+                  </form>
+                </div>
+              );
+            })()}
         </div>
       </div>
 
       {/* Read-Only Modal when Patient views Doctor profile */}
       {viewingUser && <ProfileModal user={viewingUser} onClose={() => setViewingUser(null)} />}
+
+      {/* Styled Cancel Appointment Confirmation Modal */}
+      {cancellingAppointment && (
+        <div
+          className="cancel-modal-overlay"
+          onClick={() => !cancelLoading && setCancellingAppointment(null)}
+        >
+          <div className="cancel-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="cancel-modal-header">
+              <div className="cancel-modal-icon-badge">
+                <FaExclamationTriangle />
+              </div>
+              <div className="cancel-modal-title-group">
+                <h3>Cancel Consultation</h3>
+                <p>Are you sure you want to cancel this booking?</p>
+              </div>
+            </div>
+
+            <div className="cancel-modal-body">
+              <div className="cancel-appointment-summary">
+                <div className="cancel-summary-row">
+                  <span className="cancel-summary-label">Doctor</span>
+                  <span className="cancel-summary-value">{cancellingAppointment.doctorName}</span>
+                </div>
+                <div className="cancel-summary-row">
+                  <span className="cancel-summary-label">Specialty</span>
+                  <span className="cancel-summary-value">{cancellingAppointment.specialty}</span>
+                </div>
+                <div className="cancel-summary-row">
+                  <span className="cancel-summary-label">Date</span>
+                  <span className="cancel-summary-value">{cancellingAppointment.date}</span>
+                </div>
+                <div className="cancel-summary-row">
+                  <span className="cancel-summary-label">Scheduled Slot</span>
+                  <span className="cancel-summary-value">{cancellingAppointment.time}</span>
+                </div>
+              </div>
+
+              <p className="cancel-modal-warning-text">
+                Cancelling this appointment will release your consultation slot and notify the
+                practitioner's office. You can book another slot anytime.
+              </p>
+            </div>
+
+            <div className="cancel-modal-actions">
+              <button
+                type="button"
+                className="cancel-dismiss-btn"
+                onClick={() => setCancellingAppointment(null)}
+                disabled={cancelLoading}
+              >
+                Keep Appointment
+              </button>
+              <button
+                type="button"
+                className="cancel-confirm-btn"
+                onClick={handleConfirmCancel}
+                disabled={cancelLoading}
+              >
+                {cancelLoading ? 'Cancelling...' : 'Yes, Cancel Booking'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -1,0 +1,295 @@
+========================================================================================
+                 MEDBUDDY COMPLETE DEMO LOGIN CREDENTIALS POOL                        
+========================================================================================
+Pattern: name@gmail.com / name12345
+Coverage: Every Pakistani City x Every Medical Specialty Guaranteed
+Generated on: 2026-11-18T11:08:30.721Z
+
+----------------------------------------------------------------------------------------
+ 🩺 DOCTORS (GROUPED BY CITY & SPECIALTY)
+----------------------------------------------------------------------------------------
+CITY          SPECIALTY                 DOCTOR NAME               EMAIL                       PASSWORD
+--------------------------------------------------------------------------------------------------------------
+Bahawalpur    Cardiology                Dr. Saima Basri           saima.bah@gmail.com         saimabah12345
+Bahawalpur    Dermatology               Dr. Ejaz Mehmood          ejaz.bah@gmail.com          ejazbah12345
+Bahawalpur    ENT (Otolaryngology)      Dr. Shoaib Dar            shoaib.bah@gmail.com        shoaibbah12345
+Bahawalpur    Endocrinology             Dr. Bilal Tarar           bilal.bah@gmail.com         bilalbah12345
+Bahawalpur    Gastroenterology          Dr. Faiza Ali             faiza.bah@gmail.com         faizabah12345
+Bahawalpur    General Medicine          Dr. Taimoor Hussain       taimoor.bah@gmail.com       taimoorbah12345
+Bahawalpur    General Surgery           Dr. Zara Cheema           zara.bah@gmail.com          zarabah12345
+Bahawalpur    Gynecology & Obstetrics   Dr. Shaukat Iqbal         shaukat.bah@gmail.com       shaukatbah12345
+Bahawalpur    Hematology                Dr. Rubina Basri          rubina.bah@gmail.com        rubinabah12345
+Bahawalpur    Internal Medicine         Dr. Anwar Mehmood         anwar.bah@gmail.com         anwarbah12345
+Bahawalpur    Nephrology                Dr. Asim Tarar            asim.bah@gmail.com          asimbah12345
+Bahawalpur    Neurology                 Dr. Arshad Dar            arshad.bah@gmail.com        arshadbah12345
+Bahawalpur    Oncology                  Dr. Sadia Ali             sadia.bah@gmail.com         sadiabah12345
+Bahawalpur    Ophthalmology             Dr. Jamil Hussain         jamil.bah@gmail.com         jamilbah12345
+Bahawalpur    Orthopedic Surgery        Dr. Huma Cheema           huma.bah@gmail.com          humabah12345
+Bahawalpur    Pediatrics                Dr. Ashraf Iqbal          ashraf.bah@gmail.com        ashrafbah12345
+Bahawalpur    Psychiatry                Dr. Farzana Basri         farzana.bah@gmail.com       farzanabah12345
+Bahawalpur    Pulmonology               Dr. Tahir Mehmood         tahir.bah@gmail.com         tahirbah12345
+Bahawalpur    Radiology                 Dr. Imran Tarar           imran.bah@gmail.com         imranbah12345
+Bahawalpur    Rheumatology              Dr. Shahzad Dar           shahzad.bah@gmail.com       shahzadbah12345
+Bahawalpur    Urology                   Dr. Tanveer Ali           tanveer.bah@gmail.com       tanveerbah12345
+Faisalabad    Cardiology                Dr. Kashif Butt           kashif.fai@gmail.com        kashiffai12345
+Faisalabad    Dermatology               Dr. Amber Jahangir        amber.fai@gmail.com         amberfai12345
+Faisalabad    ENT (Otolaryngology)      Dr. Uzma Ghani            uzma.fai@gmail.com          uzmafai12345
+Faisalabad    Endocrinology             Dr. Munir Riaz            munir.fai@gmail.com         munirfai12345
+Faisalabad    Gastroenterology          Dr. Amjad Niazi           amjad.fai@gmail.com         amjadfai12345
+Faisalabad    General Medicine          Dr. Asim Riaz             asim@gmail.com              asim12345
+Faisalabad    General Surgery           Dr. Farhan Malik          farhan.fai@gmail.com        farhanfai12345
+Faisalabad    Gynecology & Obstetrics   Dr. Usman Mahmood         usman.fai@gmail.com         usmanfai12345
+Faisalabad    Hematology                Dr. Mehwish Butt          mehwish.fai@gmail.com       mehwishfai12345
+Faisalabad    Internal Medicine         Dr. Saira Jahangir        saira.fai@gmail.com         sairafai12345
+Faisalabad    Nephrology                Dr. Hamid Riaz            hamid.fai@gmail.com         hamidfai12345
+Faisalabad    Neurology                 Khalid Khan               khalid@gmail.com            Khalid123
+Faisalabad    Oncology                  Dr. Javed Niazi           javed.fai@gmail.com         javedfai12345
+Faisalabad    Ophthalmology             Dr. Parveen Bukhari       parveen.fai@gmail.com       parveenfai12345
+Faisalabad    Orthopedic Surgery        Dr. Nabeel Malik          nabeel.fai@gmail.com        nabeelfai12345
+Faisalabad    Pediatrics                Dr. Waseem Mahmood        waseem.fai@gmail.com        waseemfai12345
+Faisalabad    Psychiatry                Dr. Junaid Butt           junaid.fai@gmail.com        junaidfai12345
+Faisalabad    Pulmonology               Dr. Bushra Jahangir       bushra.fai@gmail.com        bushrafai12345
+Faisalabad    Radiology                 Dr. Farooq Riaz           farooq.fai@gmail.com        farooqfai12345
+Faisalabad    Rheumatology              Dr. Fariha Ghani          fariha.fai@gmail.com        farihafai12345
+Faisalabad    Urology                   Dr. Tanveer Gill          tanveer@gmail.com           tanveer12345
+Gujranwala    Cardiology                Dr. Nazia Bukhari         nazia.guj@gmail.com         naziaguj12345
+Gujranwala    Dermatology               Dr. Sohail Malik          sohail.guj@gmail.com        sohailguj12345
+Gujranwala    ENT (Otolaryngology)      Dr. Zeeshan Butt          zeeshan.guj@gmail.com       zeeshanguj12345
+Gujranwala    Endocrinology             Dr. Nasreen Mahmood       nasreen.guj@gmail.com       nasreenguj12345
+Gujranwala    Gastroenterology          Dr. Saba Jahangir         saba.guj@gmail.com          sabaguj12345
+Gujranwala    General Medicine          Dr. Kashif Riaz           kashif.guj@gmail.com        kashifguj12345
+Gujranwala    General Surgery           Dr. Amber Ghani           amber.guj@gmail.com         amberguj12345
+Gujranwala    Gynecology & Obstetrics   Dr. Munir Niazi           munir.guj@gmail.com         munirguj12345
+Gujranwala    Hematology                Dr. Uzma Bukhari          uzma.guj@gmail.com          uzmaguj12345
+Gujranwala    Internal Medicine         Dr. Amjad Malik           amjad.guj@gmail.com         amjadguj12345
+Gujranwala    Nephrology                Dr. Shaheen Mahmood       shaheen.guj@gmail.com       shaheenguj12345
+Gujranwala    Neurology                 Dr. Farhan Butt           farhan.guj@gmail.com        farhanguj12345
+Gujranwala    Oncology                  Dr. Usman Jahangir        usman.guj@gmail.com         usmanguj12345
+Gujranwala    Ophthalmology             Dr. Mehwish Riaz          mehwish.guj@gmail.com       mehwishguj12345
+Gujranwala    Orthopedic Surgery        Dr. Saira Ghani           saira.guj@gmail.com         sairaguj12345
+Gujranwala    Pediatrics                Dr. Hamid Niazi           hamid.guj@gmail.com         hamidguj12345
+Gujranwala    Psychiatry                Dr. Tahira Bukhari        tahira.guj@gmail.com        tahiraguj12345
+Gujranwala    Pulmonology               Dr. Javed Malik           javed.guj@gmail.com         javedguj12345
+Gujranwala    Radiology                 Dr. Parveen Mahmood       parveen.guj@gmail.com       parveenguj12345
+Gujranwala    Rheumatology              Dr. Nabeel Butt           nabeel.guj@gmail.com        nabeelguj12345
+Gujranwala    Urology                   Dr. Waseem Jahangir       waseem.guj@gmail.com        waseemguj12345
+Hyderabad     Cardiology                Dr. Javed Chaudhry        javed.hyd@gmail.com         javedhyd12345
+Hyderabad     Dermatology               Dr. Parveen Gill          parveen.hyd@gmail.com       parveenhyd12345
+Hyderabad     ENT (Otolaryngology)      Dr. Waseem Fatima         waseem.hyd@gmail.com        waseemhyd12345
+Hyderabad     Endocrinology             Dr. Nabeel Sheikh         nabeel.hyd@gmail.com        nabeelhyd12345
+Hyderabad     Gastroenterology          Dr. Junaid Aziz           junaid.hyd@gmail.com        junaidhyd12345
+Hyderabad     General Medicine          Dr. Bushra Wattoo         bushra.hyd@gmail.com        bushrahyd12345
+Hyderabad     General Surgery           Dr. Farooq Khan           farooq.hyd@gmail.com        farooqhyd12345
+Hyderabad     Gynecology & Obstetrics   Dr. Fariha Siddiqui       fariha.hyd@gmail.com        farihahyd12345
+Hyderabad     Hematology                Dr. Naveed Chaudhry       naveed.hyd@gmail.com        naveedhyd12345
+Hyderabad     Internal Medicine         Dr. Ghazala Gill          ghazala.hyd@gmail.com       ghazalahyd12345
+Hyderabad     Nephrology                Dr. Tariq Sheikh          tariq.hyd@gmail.com         tariqhyd12345
+Hyderabad     Neurology                 Dr. Hina Fatima           hina.hyd@gmail.com          hinahyd12345
+Hyderabad     Oncology                  Dr. Adnan Aziz            adnan.hyd@gmail.com         adnanhyd12345
+Hyderabad     Ophthalmology             Dr. Nadia Wattoo          nadia.hyd@gmail.com         nadiahyd12345
+Hyderabad     Orthopedic Surgery        Dr. Shahid Khan           shahid.hyd@gmail.com        shahidhyd12345
+Hyderabad     Pediatrics                Dr. Shazia Siddiqui       shazia.hyd@gmail.com        shaziahyd12345
+Hyderabad     Psychiatry                Dr. Akbar Chaudhry        akbar.hyd@gmail.com         akbarhyd12345
+Hyderabad     Pulmonology               Dr. Saima Gill            saima.hyd@gmail.com         saimahyd12345
+Hyderabad     Radiology                 Dr. Ejaz Sheikh           ejaz.hyd@gmail.com          ejazhyd12345
+Hyderabad     Rheumatology              Dr. Bilal Fatima          bilal.hyd@gmail.com         bilalhyd12345
+Hyderabad     Urology                   Dr. Shoaib Aziz           shoaib.hyd@gmail.com        shoaibhyd12345
+Islamabad     Cardiology                Dr. Faisal Abbas          faisal.isl@gmail.com        faisalisl12345
+Islamabad     Dermatology               Dr. Nabeel Qureshi        nabeel@gmail.com            nabeel12345
+Islamabad     ENT (Otolaryngology)      Dr. Sumbul Ahmed          sumbul.isl@gmail.com        sumbulisl12345
+Islamabad     Endocrinology             Dr. Haroon Sethi          haroon.isl@gmail.com        haroonisl12345
+Islamabad     Gastroenterology          Dr. Irfan Shah            irfan.isl@gmail.com         irfanisl12345
+Islamabad     General Medicine          Dr. Khadija Bhatti        khadija.isl@gmail.com       khadijaisl12345
+Islamabad     General Surgery           Dr. Zubair Akhtar         zubair.isl@gmail.com        zubairisl12345
+Islamabad     Gynecology & Obstetrics   Dr. Hina Fatima           hina@gmail.com              hina12345
+Islamabad     Hematology                Dr. Kamran Abbas          kamran.isl@gmail.com        kamranisl12345
+Islamabad     Internal Medicine         Dr. Nasir Mirza           nasir.isl@gmail.com         nasirisl12345
+Islamabad     Nephrology                Dr. Rizwan Sethi          rizwan.isl@gmail.com        rizwanisl12345
+Islamabad     Neurology                 Dr. Lubna Ahmed           lubna.isl@gmail.com         lubnaisl12345
+Islamabad     Oncology                  Dr. Saba Noreen           saba@gmail.com              saba12345
+Islamabad     Ophthalmology             Dr. Yasmin Bhatti         yasmin.isl@gmail.com        yasminisl12345
+Islamabad     Orthopedic Surgery        Dr. Sajid Akhtar          sajid.isl@gmail.com         sajidisl12345
+Islamabad     Pediatrics                Dr. Noreen Baig           noreen.isl@gmail.com        noreenisl12345
+Islamabad     Psychiatry                Dr. Nasir Mehmood         nasir@gmail.com             nasir12345
+Islamabad     Pulmonology               Dr. Zainab Mirza          zainab.isl@gmail.com        zainabisl12345
+Islamabad     Radiology                 Dr. Murtaza Sethi         murtaza.isl@gmail.com       murtazaisl12345
+Islamabad     Rheumatology              Dr. Sidra Ahmed           sidra.isl@gmail.com         sidraisl12345
+Islamabad     Urology                   Dr. Mansoor Shah          mansoor.isl@gmail.com       mansoorisl12345
+Karachi       Cardiology                Dr. Ayesha Malik          ayesha@gmail.com            ayesha12345
+Karachi       Dermatology               Dr. Arshad Iqbal          arshad.kar@gmail.com        arshadkar12345
+Karachi       ENT (Otolaryngology)      Dr. Jamil Mehmood         jamil.kar@gmail.com         jamilkar12345
+Karachi       Endocrinology             Dr. Farhan Ali            farhan@gmail.com            farhan12345
+Karachi       Gastroenterology          Dr. Huma Tarar            huma.kar@gmail.com          humakar12345
+Karachi       General Medicine          Dr. Ashraf Dar            ashraf.kar@gmail.com        ashrafkar12345
+Karachi       General Surgery           Dr. Farzana Ali           farzana.kar@gmail.com       farzanakar12345
+Karachi       Gynecology & Obstetrics   Alishba Azhar             alishba@gmail.com           Alishba123
+Karachi       Gynecology & Obstetrics   Dr. Samina Kausar         samina@gmail.com            samina12345
+Karachi       Hematology                Dr. Imran Cheema          imran.kar@gmail.com         imrankar12345
+Karachi       Internal Medicine         Dr. Shahzad Iqbal         shahzad.kar@gmail.com       shahzadkar12345
+Karachi       Nephrology                Dr. Faisal Shah           faisal@gmail.com            faisal12345
+Karachi       Neurology                 Dr. Waqar Mehmood         waqar.kar@gmail.com         waqarkar12345
+Karachi       Oncology                  Dr. Maham Tarar           maham.kar@gmail.com         mahamkar12345
+Karachi       Ophthalmology             Dr. Arshad Bhatti         arshad@gmail.com            arshad12345
+Karachi       Orthopedic Surgery        Dr. Fauzia Ali            fauzia.kar@gmail.com        fauziakar12345
+Karachi       Pediatrics                Dr. Arif Hussain          arif.kar@gmail.com          arifkar12345
+Karachi       Psychiatry                Dr. Maryam Cheema         maryam.kar@gmail.com        maryamkar12345
+Karachi       Pulmonology               Dr. Faisal Iqbal          faisal.kar@gmail.com        faisalkar12345
+Karachi       Radiology                 Dr. Rehan Sheikh          rehan@gmail.com             rehan12345
+Karachi       Rheumatology              Dr. Haroon Mehmood        haroon.kar@gmail.com        haroonkar12345
+Karachi       Urology                   Dr. Sumbul Tarar          sumbul.kar@gmail.com        sumbulkar12345
+Lahore        Cardiology                Dr. Tariq Mahmood         tariq@gmail.com             tariq12345
+Lahore        Dermatology               Dr. Maryam Siddiqui       maryam@gmail.com            maryam12345
+Lahore        ENT (Otolaryngology)      Dr. Nadia Gill            nadia.lah@gmail.com         nadialah12345
+Lahore        Endocrinology             Dr. Adnan Chaudhry        adnan.lah@gmail.com         adnanlah12345
+Lahore        Gastroenterology          Dr. Zeeshan Butt          zeeshan@gmail.com           zeeshan12345
+Lahore        General Medicine          Dr. Shazia Fatima         shazia.lah@gmail.com        shazialah12345
+Lahore        General Surgery           Dr. Bilal Akram           bilal@gmail.com             bilal12345
+Lahore        Gynecology & Obstetrics   Dr. Saima Wattoo          saima.lah@gmail.com         saimalah12345
+Lahore        Hematology                Dr. Kamran Cheema         kamran@gmail.com            kamran12345
+Lahore        Internal Medicine         Dr. Bilal Siddiqui        bilal.lah@gmail.com         bilallah12345
+Lahore        Nephrology                Dr. Shoaib Chaudhry       shoaib.lah@gmail.com        shoaiblah12345
+Lahore        Neurology                 Dr. Usman Ghani           usman@gmail.com             usman12345
+Lahore        Oncology                  Dr. Shahzad Latif         shahzad@gmail.com           shahzad12345
+Lahore        Ophthalmology             Dr. Zara Fatima           zara.lah@gmail.com          zaralah12345
+Lahore        Orthopedic Surgery        Dr. Babar Jahangir        babar@gmail.com             babar12345
+Lahore        Pediatrics                Dr. Zainab Tariq          zainab@gmail.com            zainab12345
+Lahore        Pediatrics                Hamza Rizwan              hamza@gmail.com             Hamza123
+Lahore        Psychiatry                Hassan Ashraf             hassan@gmail.com            Hassan123
+Lahore        Pulmonology               Dr. Asim Siddiqui         asim.lah@gmail.com          asimlah12345
+Lahore        Radiology                 Dr. Arshad Chaudhry       arshad.lah@gmail.com        arshadlah12345
+Lahore        Rheumatology              Dr. Mehwish Hayat         mehwish@gmail.com           mehwish12345
+Lahore        Urology                   Dr. Jamil Sheikh          jamil.lah@gmail.com         jamillah12345
+Multan        Cardiology                Dr. Bushra Fatima         bushra.mul@gmail.com        bushramul12345
+Multan        Dermatology               Dr. Farooq Aziz           farooq.mul@gmail.com        farooqmul12345
+Multan        ENT (Otolaryngology)      Dr. Naveed Khan           naveed.mul@gmail.com        naveedmul12345
+Multan        Endocrinology             Dr. Fariha Wattoo         fariha.mul@gmail.com        farihamul12345
+Multan        Gastroenterology          Dr. Ghazala Siddiqui      ghazala.mul@gmail.com       ghazalamul12345
+Multan        General Medicine          Dr. Rabia Basri           rabia@gmail.com             rabia12345
+Multan        General Surgery           Dr. Hina Gill             hina.mul@gmail.com          hinamul12345
+Multan        Gynecology & Obstetrics   Dr. Adnan Sheikh          adnan.mul@gmail.com         adnanmul12345
+Multan        Hematology                Dr. Nadia Fatima          nadia.mul@gmail.com         nadiamul12345
+Multan        Internal Medicine         Dr. Shahid Aziz           shahid.mul@gmail.com        shahidmul12345
+Multan        Nephrology                Dr. Shazia Wattoo         shazia.mul@gmail.com        shaziamul12345
+Multan        Neurology                 Dr. Akbar Khan            akbar.mul@gmail.com         akbarmul12345
+Multan        Oncology                  Dr. Saima Siddiqui        saima.mul@gmail.com         saimamul12345
+Multan        Ophthalmology             Dr. Ejaz Chaudhry         ejaz.mul@gmail.com          ejazmul12345
+Multan        Orthopedic Surgery        Dr. Bilal Gill            bilal.mul@gmail.com         bilalmul12345
+Multan        Pediatrics                Dr. Shoaib Sheikh         shoaib.mul@gmail.com        shoaibmul12345
+Multan        Psychiatry                Dr. Faiza Fatima          faiza.mul@gmail.com         faizamul12345
+Multan        Pulmonology               Dr. Junaid Iqbal          junaid@gmail.com            junaid12345
+Multan        Radiology                 Dr. Zara Wattoo           zara.mul@gmail.com          zaramul12345
+Multan        Rheumatology              Dr. Shaukat Khan          shaukat.mul@gmail.com       shaukatmul12345
+Multan        Urology                   Dr. Rubina Siddiqui       rubina.mul@gmail.com        rubinamul12345
+Peshawar      Cardiology                Dr. Taimoor Dar           taimoor.pes@gmail.com       taimoorpes12345
+Peshawar      Dermatology               Dr. Zara Ali              zara.pes@gmail.com          zarapes12345
+Peshawar      ENT (Otolaryngology)      Dr. Rubina Cheema         rubina.pes@gmail.com        rubinapes12345
+Peshawar      Endocrinology             Dr. Shaukat Hussain       shaukat.pes@gmail.com       shaukatpes12345
+Peshawar      Gastroenterology          Dr. Anwar Iqbal           anwar.pes@gmail.com         anwarpes12345
+Peshawar      General Medicine          Dr. Asim Basri            asim.pes@gmail.com          asimpes12345
+Peshawar      General Surgery           Dr. Arshad Mehmood        arshad.pes@gmail.com        arshadpes12345
+Peshawar      Gynecology & Obstetrics   Dr. Sadia Tarar           sadia.pes@gmail.com         sadiapes12345
+Peshawar      Hematology                Dr. Jamil Dar             jamil.pes@gmail.com         jamilpes12345
+Peshawar      Internal Medicine         Dr. Huma Ali              huma.pes@gmail.com          humapes12345
+Peshawar      Nephrology                Dr. Ashraf Hussain        ashraf.pes@gmail.com        ashrafpes12345
+Peshawar      Neurology                 Dr. Farzana Cheema        farzana.pes@gmail.com       farzanapes12345
+Peshawar      Oncology                  Dr. Tahir Iqbal           tahir.pes@gmail.com         tahirpes12345
+Peshawar      Ophthalmology             Dr. Imran Basri           imran.pes@gmail.com         imranpes12345
+Peshawar      Orthopedic Surgery        Dr. Shahzad Mehmood       shahzad.pes@gmail.com       shahzadpes12345
+Peshawar      Pediatrics                Dr. Adnan Baig            adnan@gmail.com             adnan12345
+Peshawar      Psychiatry                Dr. Waqar Dar             waqar.pes@gmail.com         waqarpes12345
+Peshawar      Pulmonology               Dr. Maham Ali             maham.pes@gmail.com         mahampes12345
+Peshawar      Radiology                 Dr. Khalil Hussain        khalil.pes@gmail.com        khalilpes12345
+Peshawar      Rheumatology              Dr. Fauzia Cheema         fauzia.pes@gmail.com        fauziapes12345
+Peshawar      Urology                   Dr. Arif Iqbal            arif.pes@gmail.com          arifpes12345
+Quetta        Cardiology                Dr. Maham Bhatti          maham.que@gmail.com         mahamque12345
+Quetta        Dermatology               Dr. Khalil Akhtar         khalil.que@gmail.com        khalilque12345
+Quetta        ENT (Otolaryngology)      Dr. Arif Abbas            arif.que@gmail.com          arifque12345
+Quetta        Endocrinology             Dr. Fauzia Baig           fauzia.que@gmail.com        fauziaque12345
+Quetta        Gastroenterology          Dr. Maryam Mirza          maryam.que@gmail.com        maryamque12345
+Quetta        General Medicine          Dr. Faisal Sethi          faisal.que@gmail.com        faisalque12345
+Quetta        General Surgery           Dr. Rehan Ahmed           rehan.que@gmail.com         rehanque12345
+Quetta        Gynecology & Obstetrics   Dr. Haroon Shah           haroon.que@gmail.com        haroonque12345
+Quetta        Hematology                Dr. Sumbul Bhatti         sumbul.que@gmail.com        sumbulque12345
+Quetta        Internal Medicine         Dr. Irfan Akhtar          irfan.que@gmail.com         irfanque12345
+Quetta        Nephrology                Dr. Khadija Baig          khadija.que@gmail.com       khadijaque12345
+Quetta        Neurology                 Dr. Zubair Abbas          zubair.que@gmail.com        zubairque12345
+Quetta        Oncology                  Dr. Ayesha Mirza          ayesha.que@gmail.com        ayeshaque12345
+Quetta        Ophthalmology             Dr. Kamran Sethi          kamran.que@gmail.com        kamranque12345
+Quetta        Orthopedic Surgery        Dr. Nasir Ahmed           nasir.que@gmail.com         nasirque12345
+Quetta        Pediatrics                Dr. Rizwan Shah           rizwan.que@gmail.com        rizwanque12345
+Quetta        Psychiatry                Dr. Lubna Bhatti          lubna.que@gmail.com         lubnaque12345
+Quetta        Pulmonology               Dr. Naeem Akhtar          naeem.que@gmail.com         naeemque12345
+Quetta        Radiology                 Dr. Yasmin Baig           yasmin.que@gmail.com        yasminque12345
+Quetta        Rheumatology              Dr. Sajid Abbas           sajid.que@gmail.com         sajidque12345
+Quetta        Urology                   Dr. Noreen Mirza          noreen.que@gmail.com        noreenque12345
+Rawalpindi    Cardiology                Dr. Zainab Wasti          zainab.raw@gmail.com        zainabraw12345
+Rawalpindi    Dermatology               Dr. Murtaza Qureshi       murtaza.raw@gmail.com       murtazaraw12345
+Rawalpindi    ENT (Otolaryngology)      Dr. Imran Haider          imran@gmail.com             imran12345
+Rawalpindi    Endocrinology             Dr. Sidra Raza            sidra.raw@gmail.com         sidraraw12345
+Rawalpindi    Gastroenterology          Dr. Rukhsana Latif        rukhsana.raw@gmail.com      rukhsanaraw12345
+Rawalpindi    General Medicine          Dr. Iqbal Kausar          iqbal.raw@gmail.com         iqbalraw12345
+Rawalpindi    General Surgery           Dr. Samra Haider          samra.raw@gmail.com         samraraw12345
+Rawalpindi    Gynecology & Obstetrics   Dr. Rabia Bajwa           rabia.raw@gmail.com         rabiaraw12345
+Rawalpindi    Hematology                Dr. Babar Wasti           babar.raw@gmail.com         babarraw12345
+Rawalpindi    Internal Medicine         Dr. Waseem Abbas          waseem@gmail.com            waseem12345
+Rawalpindi    Nephrology                Dr. Anam Raza             anam.raw@gmail.com          anamraw12345
+Rawalpindi    Neurology                 Dr. Rashid Farooq         rashid.raw@gmail.com        rashidraw12345
+Rawalpindi    Oncology                  Dr. Nazia Latif           nazia.raw@gmail.com         naziaraw12345
+Rawalpindi    Ophthalmology             Dr. Sohail Kausar         sohail.raw@gmail.com        sohailraw12345
+Rawalpindi    Orthopedic Surgery        Dr. Shoaib Akhtar         shoaib@gmail.com            shoaib12345
+Rawalpindi    Pediatrics                Dr. Zeeshan Bajwa         zeeshan.raw@gmail.com       zeeshanraw12345
+Rawalpindi    Psychiatry                Dr. Saba Wasti            saba.raw@gmail.com          sabaraw12345
+Rawalpindi    Pulmonology               Dr. Kashif Qureshi        kashif.raw@gmail.com        kashifraw12345
+Rawalpindi    Radiology                 Dr. Amber Raza            amber.raw@gmail.com         amberraw12345
+Rawalpindi    Rheumatology              Dr. Munir Farooq          munir.raw@gmail.com         munirraw12345
+Rawalpindi    Urology                   Dr. Uzma Latif            uzma.raw@gmail.com          uzmaraw12345
+Sialkot       Cardiology                Dr. Naeem Kausar          naeem.sia@gmail.com         naeemsia12345
+Sialkot       Dermatology               Dr. Yasmin Haider         yasmin.sia@gmail.com        yasminsia12345
+Sialkot       ENT (Otolaryngology)      Dr. Noreen Wasti          noreen.sia@gmail.com        noreensia12345
+Sialkot       Endocrinology             Dr. Sajid Bajwa           sajid.sia@gmail.com         sajidsia12345
+Sialkot       Gastroenterology          Dr. Samina Qureshi        samina.sia@gmail.com        saminasia12345
+Sialkot       General Medicine          Dr. Zainab Raza           zainab.sia@gmail.com        zainabsia12345
+Sialkot       General Surgery           Dr. Murtaza Farooq        murtaza.sia@gmail.com       murtazasia12345
+Sialkot       Gynecology & Obstetrics   Dr. Sidra Latif           sidra.sia@gmail.com         sidrasia12345
+Sialkot       Hematology                Dr. Mansoor Kausar        mansoor.sia@gmail.com       mansoorsia12345
+Sialkot       Internal Medicine         Dr. Rukhsana Haider       rukhsana.sia@gmail.com      rukhsanasia12345
+Sialkot       Nephrology                Dr. Iqbal Bajwa           iqbal.sia@gmail.com         iqbalsia12345
+Sialkot       Neurology                 Dr. Samra Wasti           samra.sia@gmail.com         samrasia12345
+Sialkot       Oncology                  Dr. Rabia Qureshi         rabia.sia@gmail.com         rabiasia12345
+Sialkot       Ophthalmology             Dr. Babar Raza            babar.sia@gmail.com         babarsia12345
+Sialkot       Orthopedic Surgery        Dr. Zahid Farooq          zahid.sia@gmail.com         zahidsia12345
+Sialkot       Pediatrics                Dr. Anam Latif            anam.sia@gmail.com          anamsia12345
+Sialkot       Psychiatry                Dr. Rashid Kausar         rashid.sia@gmail.com        rashidsia12345
+Sialkot       Pulmonology               Dr. Nazia Haider          nazia.sia@gmail.com         naziasia12345
+Sialkot       Radiology                 Dr. Sohail Bajwa          sohail.sia@gmail.com        sohailsia12345
+Sialkot       Rheumatology              Dr. Nasreen Wasti         nasreen.sia@gmail.com       nasreensia12345
+Sialkot       Urology                   Dr. Zeeshan Qureshi       zeeshan.sia@gmail.com       zeeshansia12345
+
+----------------------------------------------------------------------------------------
+ 👤 PATIENTS
+----------------------------------------------------------------------------------------
+CITY          PATIENT NAME              EMAIL                       PASSWORD
+-------------------------------------------------------------------------------------
+Faisalabad    Ahmad Mirza               ahmad@gmail.com             Ahmad123
+Faisalabad    Kiran Naveed              kiran@gmail.com             kiran12345
+Islamabad     Mahnoor Khan              mahnoor@gmail.com           mahnoor12345
+Islamabad     Muhammad Umar             umar@gmail.com              umar12345
+Karachi       Danish Qureshi            danish@gmail.com            danish12345
+Karachi       Fatima Zahra              fatima@gmail.com            fatima12345
+Karachi       Robert Langdon            robert.langdon@example.com  password123
+Lahore        Ali Raza                  aliraza@gmail.com           aliraza12345
+Lahore        Areeba Kashif             areeba@gmail.com            areeba12345
+Lahore        Emily Watson              emily.watson@example.com    password123
+Lahore        M. Talha Faizan           talhafaizan721@gmail.com    Talha123
+Lahore        Sana Javed                sanajaved@gmail.com         sanajaved12345
+Lahore        Taha Ali                  taha@gmail.com              Taha1234
+Multan        Waqas Munir               waqas@gmail.com             waqas12345
+Peshawar      Saad Farooq               saad@gmail.com              saad12345
+Quetta        Zubair Afzal              zubair@gmail.com            zubair12345
+Rawalpindi    Hamza Chaudhry            hamzac@gmail.com            hamzac12345
+
+========================================================================================
+Total Doctors in System:  254 (Covering all 12 Cities x 21 Specialties)
+Total Patients in System: 17
+Total Appointments:       521 (Statuses: Pending, Confirmed, Completed, Cancelled)
+========================================================================================

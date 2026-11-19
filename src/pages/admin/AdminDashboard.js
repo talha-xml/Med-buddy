@@ -30,7 +30,7 @@ import {
   FaStethoscope,
   FaInfoCircle
 } from 'react-icons/fa';
-import './AdminDashboard.css';
+import '../../styles/AdminDashboard.css';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -594,7 +594,7 @@ export default function AdminDashboard() {
                       </td>
                     </tr>
                   ) : (
-                    filteredDoctors.map((doc) => {
+                    filteredDoctors.map((doc, idx) => {
                       const status = doctorStatuses[doc.id] || {
                         isVerified: false,
                         isEnabled: true

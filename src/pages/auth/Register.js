@@ -32,6 +32,8 @@ export default function Register() {
     specialty: '', // for doctor
     yearsOfExperience: '', // for doctor
     experienceDomain: '', // for doctor
+    availableFrom: '09:00 AM', // for doctor
+    availableTo: '05:00 PM', // for doctor
     bio: '', // for doctor
     password: '',
     confirmPassword: '',
@@ -94,6 +96,8 @@ export default function Register() {
         yearsOfExperience:
           isDoctor && formData.yearsOfExperience ? Number(formData.yearsOfExperience) : undefined,
         experienceDomain: isDoctor ? formData.experienceDomain : undefined,
+        availableFrom: isDoctor ? formData.availableFrom : undefined,
+        availableTo: isDoctor ? formData.availableTo : undefined,
         bio: isDoctor ? formData.bio : undefined,
         password: formData.password
       });
@@ -116,7 +120,7 @@ export default function Register() {
   };
 
   return (
-    <AuthLayout
+    <AuthLayout centered={true}
       title={isDoctor ? 'Doctor & Specialist Registration' : 'Patient Registration'}
       subtitle={
         isDoctor
@@ -348,6 +352,56 @@ export default function Register() {
                 </div>
               </div>
 
+              {/* Doctor Consultation Hours: Available From */}
+              <div className="form-group-compact">
+                <label htmlFor="availableFrom">Consultation Hours From</label>
+                <div className="input-container">
+                  <select
+                    id="availableFrom"
+                    name="availableFrom"
+                    className="input-field-compact"
+                    style={{ paddingLeft: '12px' }}
+                    value={formData.availableFrom}
+                    onChange={handleChange}
+                    required
+                  >
+                    {[
+                      '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
+                      '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'
+                    ].map((time) => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Doctor Consultation Hours: Available To */}
+              <div className="form-group-compact">
+                <label htmlFor="availableTo">Consultation Hours To</label>
+                <div className="input-container">
+                  <select
+                    id="availableTo"
+                    name="availableTo"
+                    className="input-field-compact"
+                    style={{ paddingLeft: '12px' }}
+                    value={formData.availableTo}
+                    onChange={handleChange}
+                    required
+                  >
+                    {[
+                      '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM',
+                      '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM', '10:00 PM'
+                    ].map((time) => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               {/* Doctor Domain Expertise (Spans full width) */}
               <div className="form-group-compact span-full">
                 <label htmlFor="experienceDomain">Specific Experience Domain & Expertise</label>
@@ -429,53 +483,65 @@ export default function Register() {
               />
             </div>
           </div>
+
+          {/* Register Button in the same row */}
+          <div className="form-group-compact auth-btn-inline-container" style={{ justifyContent: 'flex-end' }}>
+            <button
+              type="submit"
+              className="auth-submit-btn-wide"
+              disabled={loading}
+              style={{ width: '100%', height: '42px', marginTop: 'auto' }}
+            >
+              {loading ? 'Creating Account...' : `Register as ${isDoctor ? 'Doctor' : 'Patient'}`}
+            </button>
+          </div>
         </div>
 
-        {/* Terms row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', marginTop: '6px' }}>
-          <label
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontSize: '0.88rem',
-              color: '#334155',
-              cursor: 'pointer'
-            }}
-          >
-            <input
-              type="checkbox"
-              name="acceptTerms"
-              checked={formData.acceptTerms}
-              onChange={handleChange}
-              required
-            />
-            <span>I accept the medical privacy policy and HIPAA rules</span>
-          </label>
-          <Link
-            to="/terms"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontSize: '0.84rem', color: 'var(--primary)', textDecoration: 'underline' }}
-          >
-            View Terms & Policies
-          </Link>
-        </div>
+        {/* Terms and Links row */}
+        <div className="auth-bottom-action-row" style={{ marginTop: '10px', paddingTop: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                fontSize: '1rem',
+                color: '#334155',
+                cursor: 'pointer',
+                fontWeight: 500
+              }}
+            >
+              <input
+                type="checkbox"
+                name="acceptTerms"
+                checked={formData.acceptTerms}
+                onChange={handleChange}
+                style={{
+                  width: '18px',
+                  height: '18px',
+                  cursor: 'pointer',
+                  accentColor: 'var(--primary)'
+                }}
+                required
+              />
+              <span>I accept the medical privacy policy and HIPAA rules</span>
+            </label>
+            <Link
+              to="/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: '0.95rem', color: 'var(--primary)', textDecoration: 'underline', fontWeight: 500 }}
+            >
+              View Terms & Policies
+            </Link>
+          </div>
 
-        {/* Bottom Actions Row */}
-        <div className="auth-bottom-action-row">
           <div className="auth-switch-link">
             Already have an account? <Link to={`/login/${role}`}>Sign In</Link>
             <span style={{ margin: '0 8px', color: '#cbd5e1' }}>•</span>
             <Link to="/register" style={{ color: '#64748b' }}>
               Switch Role
             </Link>
-          </div>
-
-          <div className="auth-btn-wrapper">
-            <button type="submit" className="auth-submit-btn-wide" disabled={loading}>
-              {loading ? 'Creating Account...' : `Register as ${isDoctor ? 'Doctor' : 'Patient'}`}
-            </button>
           </div>
         </div>
       </form>

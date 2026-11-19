@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { MedicalCrossIcon, UserIcon } from '../../components/auth/AuthLayout';
 import { FaArrowRight, FaStethoscope } from 'react-icons/fa';
-import './RoleSelect.css';
+import '../../styles/RoleSelect.css';
 
 export default function RoleSelect() {
   const navigate = useNavigate();

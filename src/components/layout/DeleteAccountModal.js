@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FaTrashAlt, FaExclamationTriangle } from 'react-icons/fa';
-import './DeleteAccountModal.css';
+import '../../styles/DeleteAccountModal.css';
 
 export default function DeleteAccountModal({ onClose }) {
   const { currentUser, removeAccount } = useAuth();

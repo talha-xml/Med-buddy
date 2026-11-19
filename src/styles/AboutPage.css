@@ -1,8 +1,7 @@
 /* About Page Styling */
 .about-page {
   min-height: 100vh;
-  background: 
-    radial-gradient(circle at 10% 15%, rgba(224, 242, 254, 0.75) 0%, transparent 45%),
+  background: radial-gradient(circle at 10% 15%, rgba(224, 242, 254, 0.75) 0%, transparent 45%),
     radial-gradient(circle at 90% 25%, rgba(204, 251, 241, 0.65) 0%, transparent 40%),
     radial-gradient(circle at 50% 70%, rgba(238, 242, 255, 0.7) 0%, transparent 50%),
     linear-gradient(180deg, #f0fdfa 0%, #f8fafc 40%, #f1f5f9 100%);
@@ -141,10 +140,10 @@
   letter-spacing: -0.02em;
 }
 
-.metric-label {
+.about-metrics-container .metric-label {
   font-size: 0.88rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: #ffffff !important;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-top: 4px;
@@ -192,4 +191,3 @@
     font-size: 2.2rem;
   }
 }
-

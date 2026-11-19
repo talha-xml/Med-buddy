@@ -5,7 +5,7 @@ import PublicFooter from '../components/layout/PublicFooter';
 import { ShieldCheckIcon } from '../components/auth/AuthLayout';
 import doctorHeroImg from '../assets/doctor-hero-bg.jpg';
 import { FaArrowRight, FaUserMd, FaHospital, FaClock, FaCheckCircle } from 'react-icons/fa';
-import './Home.css';
+import '../styles/Home.css';
 
 export default function Home() {
   const navigate = useNavigate();

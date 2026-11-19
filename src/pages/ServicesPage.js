@@ -4,7 +4,7 @@ import PublicNavbar from '../components/layout/PublicNavbar';
 import PublicFooter from '../components/layout/PublicFooter';
 import { clinicalServices } from '../services/clinicalData';
 import { FaCheck, FaArrowRight, FaShieldAlt } from 'react-icons/fa';
-import './ServicesPage.css';
+import '../styles/ServicesPage.css';
 
 export default function ServicesPage() {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { MedicalCrossIcon } from '../auth/AuthLayout';
-import './PublicNavbar.css';
+import '../../styles/PublicNavbar.css';
 
 export default function PublicNavbar() {
   const navigate = useNavigate();

@@ -1,10 +1,8 @@
 /* Clinical Portal & Dashboard Styling */
 .dashboard-page {
   min-height: calc(100vh - 70px);
-  background: 
-    radial-gradient(circle at 10% 10%, rgba(224, 242, 254, 0.6) 0%, transparent 40%),
-    radial-gradient(circle at 90% 15%, rgba(204, 251, 241, 0.5) 0%, transparent 40%),
-    #f8fafc;
+  background: radial-gradient(circle at 10% 10%, rgba(224, 242, 254, 0.6) 0%, transparent 40%),
+    radial-gradient(circle at 90% 15%, rgba(204, 251, 241, 0.5) 0%, transparent 40%), #f8fafc;
   padding: 32px 24px;
 }
 
@@ -63,10 +61,10 @@
 }
 
 .tab-btn.active {
-  background-color: #ffffff;
-  color: var(--primary);
+  background: #ffffff !important;
+  color: var(--primary, #0284c7) !important;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Stat Cards */
@@ -354,7 +352,7 @@
 .specialty-dropdown-item:hover,
 .specialty-dropdown-item.active {
   background-color: #f0fdfa;
-  color: #0f766e;
+  color: #9dede6;
   font-weight: 600;
 }
 
@@ -545,8 +543,6 @@ textarea.input-field {
     justify-content: flex-start;
   }
 }
-
-
 
 /* Doctor Search & Discovery Box */
 .doctor-search-box {
@@ -964,3 +960,172 @@ textarea.input-field {
   font-size: 1.1rem;
 }
 
+/* Cancel Appointment Confirmation Modal */
+.cancel-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2500;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.cancel-modal-card {
+  background: #ffffff;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 460px;
+  border: 1.5px solid #fee2e2;
+  box-shadow: 0 24px 48px -12px rgba(220, 38, 38, 0.22);
+  overflow: hidden;
+  animation: modalScaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.cancel-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 24px 18px;
+  background: linear-gradient(180deg, #fff5f5 0%, #ffffff 100%);
+  border-bottom: 1px solid #fee2e2;
+}
+
+.cancel-modal-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #fee2e2;
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.cancel-modal-title-group h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #991b1b;
+  letter-spacing: -0.01em;
+}
+
+.cancel-modal-title-group p {
+  margin: 3px 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.cancel-modal-body {
+  padding: 20px 24px;
+}
+
+.cancel-appointment-summary {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.cancel-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  margin-bottom: 8px;
+}
+
+.cancel-summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.cancel-summary-label {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.cancel-summary-value {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.cancel-modal-warning-text {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cancel-modal-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px 22px;
+  justify-content: flex-end;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+.cancel-confirm-btn {
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+  font-family: inherit;
+}
+
+.cancel-confirm-btn:hover {
+  background: #b91c1c;
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35);
+}
+
+.cancel-confirm-btn:disabled {
+  background: #fca5a5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.cancel-dismiss-btn {
+  background: #ffffff;
+  color: #475569;
+  border: 1.5px solid #cbd5e1;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.cancel-dismiss-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}

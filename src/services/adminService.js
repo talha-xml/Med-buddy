@@ -1,4 +1,6 @@
 // Admin Auth and Session Service (Frontend only)
+// Uses sessionStorage so admin session is transient to the browser tab/session
+// and NEVER persists across closing and reopening or bleeds into public portal sign-in.
 const ADMIN_STORAGE_KEY = 'medbuddy_admin_auth';
 
 export const DEFAULT_ADMIN_CREDENTIALS = {
@@ -10,7 +12,7 @@ export const DEFAULT_ADMIN_CREDENTIALS = {
 
 export function getAdminSession() {
   try {
-    const raw = localStorage.getItem(ADMIN_STORAGE_KEY);
+    const raw = sessionStorage.getItem(ADMIN_STORAGE_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch (e) {
     return null;
@@ -19,9 +21,9 @@ export function getAdminSession() {
 
 export function setAdminSession(adminData) {
   if (adminData) {
-    localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(adminData));
+    sessionStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(adminData));
   } else {
-    localStorage.removeItem(ADMIN_STORAGE_KEY);
+    sessionStorage.removeItem(ADMIN_STORAGE_KEY);
   }
 }
 
@@ -43,4 +45,3 @@ export function adminLogin(email, password) {
 export function adminLogout() {
   setAdminSession(null);
 }
-

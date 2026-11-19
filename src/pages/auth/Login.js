@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import AuthLayout, { EmailIcon, LockIcon } from '../../components/auth/AuthLayout';
 import { useAuth } from '../../context/AuthContext';
-import { FaStethoscope, FaUserAlt, FaExclamationTriangle, FaShieldAlt } from 'react-icons/fa';
-import VerificationModal from '../../components/common/VerificationModal';
+import { FaStethoscope, FaUserAlt, FaExclamationTriangle } from 'react-icons/fa';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -22,10 +21,6 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Verification prompt modal state if doctor login is blocked due to unverified status
-  const [unverifiedDoctor, setUnverifiedDoctor] = useState(null);
-  const [showVerifyModal, setShowVerifyModal] = useState(false);
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -37,7 +32,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setUnverifiedDoctor(null);
 
     if (!formData.email || !formData.password) {
       setError('Please provide both email and password.');
@@ -56,14 +50,6 @@ export default function Login() {
       }
     } catch (err) {
       setLoading(false);
-
-      // Check if blocked because unverified (not disabled)
-      if (err.reason === 'unverified' && err.user) {
-        setUnverifiedDoctor(err.user);
-      } else if (err.data && err.data.reason === 'unverified' && err.data.user) {
-        setUnverifiedDoctor(err.data.user);
-      }
-
       setError(err.message || 'Login failed.');
     }
   };
@@ -100,36 +86,9 @@ export default function Login() {
         </div>
 
         {error && (
-          <div className="auth-error-alert" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-              <FaExclamationTriangle style={{ flexShrink: 0, marginTop: '3px' }} />
-              <span>{error}</span>
-            </div>
-
-            {/* If doctor is blocked solely because unverified (not disabled), offer verify modal */}
-            {isDoctor && unverifiedDoctor && !error.includes('disabled by the Admin') && (
-              <div style={{ marginTop: '4px', paddingTop: '8px', borderTop: '1px solid rgba(220, 38, 38, 0.2)' }}>
-                <button
-                  type="button"
-                  onClick={() => setShowVerifyModal(true)}
-                  style={{
-                    background: '#7c3aed',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '6px',
-                    padding: '6px 14px',
-                    fontSize: '0.84rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                >
-                  <FaShieldAlt /> Verify Account Now
-                </button>
-              </div>
-            )}
+          <div className="auth-error-alert" style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+            <FaExclamationTriangle style={{ flexShrink: 0, marginTop: '3px' }} />
+            <span>{error}</span>
           </div>
         )}
 
@@ -211,20 +170,6 @@ export default function Login() {
           </div>
         </form>
       </div>
-
-      {/* Verification Modal triggered from login block */}
-      {unverifiedDoctor && (
-        <VerificationModal
-          doctor={unverifiedDoctor}
-          isOpen={showVerifyModal}
-          onClose={() => setShowVerifyModal(false)}
-          onVerified={() => {
-            setError('');
-            alert('Your profile has been verified! You can now sign in.');
-            navigate('/doctor/dashboard', { replace: true });
-          }}
-        />
-      )}
     </AuthLayout>
   );
 }

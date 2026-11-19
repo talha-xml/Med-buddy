@@ -1,0 +1,598 @@
+/* =========================================================
+   MedBuddy — Premium Healthcare Landing Page
+   Refined Medical SaaS Design
+   Existing JSX classes and functionality preserved
+========================================================= */
+
+.home-page {
+  --home-ink: #142b43;
+  --home-muted: #66798c;
+  --home-blue: #087db5;
+  --home-blue-dark: #076493;
+  --home-teal: #0b9990;
+  --home-border: #e7eef3;
+  --home-surface: #ffffff;
+  --home-bg: #f7fafc;
+  --home-shadow: 0 16px 45px rgba(20, 43, 67, 0.07);
+
+  min-height: 100vh;
+  position: relative;
+  overflow-x: clip;
+  color: var(--home-ink);
+  background: radial-gradient(ellipse at 5% 5%, rgba(211, 237, 249, 0.5), transparent 35rem),
+    radial-gradient(ellipse at 95% 35%, rgba(212, 244, 239, 0.35), transparent 32rem),
+    var(--home-bg);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  font-family: inherit;
+}
+
+.home-page *,
+.home-page *::before,
+.home-page *::after {
+  box-sizing: border-box;
+}
+
+.home-page::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 700px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.22;
+  background-image: linear-gradient(rgba(8, 125, 181, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 125, 181, 0.05) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(to bottom, #000, transparent 90%);
+}
+
+.home-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   Navigation
+========================================================= */
+
+.landing-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 15px clamp(22px, 6vw, 90px);
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid rgba(225, 235, 242, 0.9);
+  box-shadow: 0 4px 22px rgba(20, 43, 67, 0.035);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.landing-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand-icon-box {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary, #0d9488);
+  background: linear-gradient(135deg, #e0f2fe 0%, #ccfbf1 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.15);
+}
+
+.brand-name {
+  color: var(--home-ink);
+  font-size: 1.38rem;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+/* =========================================================
+   Hero Section
+========================================================= */
+
+.template-hero-section {
+  min-height: 610px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center 75%;
+  background-size: cover;
+  overflow: hidden;
+}
+
+.template-hero-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 85px clamp(24px, 8vw, 120px);
+}
+
+.template-hero-content {
+  max-width: 660px;
+}
+
+.template-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 16px;
+  margin-bottom: 27px;
+  color: #0878aa;
+  background: rgba(226, 244, 251, 0.85);
+  border: 1px solid rgba(8, 125, 181, 0.12);
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+}
+
+.template-hero-badge svg {
+  width: 17px;
+  height: 17px;
+}
+
+.template-hero-title {
+  max-width: 680px;
+  margin: 0;
+  color: var(--home-ink);
+  font-size: clamp(2.7rem, 5vw, 4.35rem);
+  font-weight: 800;
+  line-height: 1.13;
+  letter-spacing: -0.055em;
+}
+
+.template-hero-title span {
+  color: var(--home-blue);
+}
+
+.template-hero-subtitle {
+  max-width: 565px;
+  margin: 24px 0 0;
+  color: #63768a;
+  font-size: 1.08rem;
+  line-height: 1.85;
+  font-weight: 400;
+}
+
+.template-hero-btn-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 34px;
+}
+
+.template-primary-btn,
+.template-secondary-btn {
+  min-height: 53px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 25px;
+  border-radius: 10px;
+  font-size: 0.94rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.template-primary-btn {
+  color: #fff;
+  background: linear-gradient(135deg, #087fb8, #076b9f);
+  border: 1px solid transparent;
+  box-shadow: 0 9px 22px rgba(8, 125, 181, 0.2);
+}
+
+.template-primary-btn:hover {
+  background: linear-gradient(135deg, #076c9d, #07567f);
+  box-shadow: 0 12px 26px rgba(8, 125, 181, 0.27);
+  transform: translateY(-2px);
+}
+
+.template-secondary-btn {
+  color: var(--home-ink);
+  background: #fff;
+  border: 1px solid #dce7ee;
+}
+
+.template-secondary-btn:hover {
+  color: var(--home-blue);
+  border-color: var(--home-blue);
+  background: #f5fbfe;
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   Main Sections
+========================================================= */
+
+.home-section {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 95px clamp(24px, 7vw, 100px);
+}
+
+.clean-section {
+  background: transparent;
+}
+
+.section-head {
+  max-width: 720px;
+  margin: 0 auto 52px;
+  text-align: center;
+}
+
+.section-tag {
+  display: inline-block;
+  margin-bottom: 15px;
+  color: var(--home-blue);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.section-title {
+  margin: 0;
+  color: var(--home-ink);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+}
+
+.section-subtitle {
+  max-width: 640px;
+  margin: 17px auto 0;
+  color: var(--home-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   Feature Cards
+========================================================= */
+
+.stats-banner-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.stats-banner-item {
+  min-height: 235px;
+  padding: 30px 25px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 17px;
+  box-shadow: 0 7px 25px rgba(20, 43, 67, 0.035);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.stats-banner-item:hover {
+  transform: translateY(-6px);
+  border-color: rgba(8, 125, 181, 0.23);
+  box-shadow: 0 17px 38px rgba(20, 43, 67, 0.085);
+}
+
+.stats-icon-circle {
+  width: 53px;
+  height: 53px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 23px;
+  color: var(--home-blue);
+  background: #eaf6fc;
+  border-radius: 14px;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.stats-banner-item:hover .stats-icon-circle {
+  color: #fff;
+  background: linear-gradient(135deg, #0786bd, #0b9990);
+}
+
+.stats-banner-item h3 {
+  margin: 0 0 11px;
+  color: var(--home-ink);
+  font-size: 1.08rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.stats-banner-item p {
+  margin: 0;
+  color: var(--home-muted);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   Call To Action
+========================================================= */
+
+.home-cta-card {
+  position: relative;
+  overflow: hidden;
+  padding: 65px 35px;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.14), transparent 18rem),
+    linear-gradient(120deg, #075e91, #087fb5 55%, #0b9990);
+  border-radius: 23px;
+  box-shadow: 0 20px 45px rgba(8, 105, 151, 0.17);
+}
+
+.home-cta-card::before,
+.home-cta-card::after {
+  content: '';
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.home-cta-card::before {
+  width: 340px;
+  height: 340px;
+  top: -200px;
+  left: -90px;
+}
+
+.home-cta-card::after {
+  width: 280px;
+  height: 280px;
+  right: -100px;
+  bottom: -190px;
+}
+
+.home-cta-card h2 {
+  position: relative;
+  z-index: 1;
+  max-width: 750px;
+  margin: 0 auto;
+  color: #fff;
+  font-size: clamp(1.8rem, 3.5vw, 2.55rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+
+.home-cta-card p {
+  position: relative;
+  z-index: 1;
+  max-width: 650px;
+  margin: 17px auto 0;
+  color: rgba(255, 255, 255, 0.83);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.home-cta-card > div {
+  position: relative;
+  z-index: 2;
+}
+
+.home-cta-card .nav-register-btn,
+.home-cta-card .nav-login-btn {
+  min-height: 49px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  font-size: 0.91rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.home-cta-card .nav-register-btn {
+  color: #076c9e;
+  background: #fff;
+  border: 1px solid #fff;
+}
+
+.home-cta-card .nav-register-btn:hover {
+  background: #eaf6fc;
+  transform: translateY(-3px);
+}
+
+.home-cta-card .nav-login-btn {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.home-cta-card .nav-login-btn:hover {
+  color: #076c9e;
+  background: #fff;
+  transform: translateY(-3px);
+}
+
+/* =========================================================
+   Accessibility & Focus
+========================================================= */
+
+.home-page a:focus-visible,
+.home-page button:focus-visible {
+  outline: 3px solid rgba(8, 125, 181, 0.4);
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   Responsive Design — Tablets
+========================================================= */
+
+@media (max-width: 1024px) {
+  .template-hero-section {
+    min-height: 560px;
+    background-position: 62% center;
+  }
+
+  .template-hero-container {
+    padding: 75px 6%;
+  }
+
+  .template-hero-content {
+    max-width: 570px;
+  }
+
+  .stats-banner-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-section {
+    padding: 80px 5%;
+  }
+}
+
+/* =========================================================
+   Responsive Design — Mobile
+========================================================= */
+
+@media (max-width: 640px) {
+  .landing-nav {
+    gap: 12px;
+    padding: 12px 18px;
+  }
+
+  .brand-icon-box {
+    width: 39px;
+    height: 39px;
+    border-radius: 11px;
+  }
+
+  .brand-name {
+    font-size: 1.2rem;
+  }
+
+  .template-hero-section {
+    min-height: 590px;
+    background-position: 65% center;
+    background-size: cover;
+  }
+
+  .template-hero-container {
+    padding: 75px 23px;
+  }
+
+  .template-hero-content {
+    max-width: 100%;
+  }
+
+  .template-hero-badge {
+    font-size: 0.72rem;
+    padding: 9px 12px;
+    margin-bottom: 22px;
+  }
+
+  .template-hero-title {
+    font-size: clamp(2.35rem, 10vw, 3.25rem);
+    line-height: 1.13;
+  }
+
+  .template-hero-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    margin-top: 20px;
+  }
+
+  .template-hero-btn-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 27px;
+  }
+
+  .template-primary-btn,
+  .template-secondary-btn {
+    width: 100%;
+    min-height: 51px;
+  }
+
+  .home-section {
+    padding: 70px 20px;
+  }
+
+  .section-head {
+    margin-bottom: 35px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.93rem;
+  }
+
+  .stats-banner-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .stats-banner-item {
+    min-height: auto;
+    padding: 25px 23px;
+  }
+
+  .stats-icon-circle {
+    margin-bottom: 17px;
+  }
+
+  .home-cta-card {
+    padding: 48px 22px;
+    border-radius: 17px;
+  }
+
+  .home-cta-card h2 {
+    font-size: 1.85rem;
+  }
+
+  .home-cta-card p {
+    font-size: 0.92rem;
+  }
+
+  .home-cta-card > div {
+    flex-direction: column;
+    gap: 12px !important;
+  }
+
+  .home-cta-card .nav-register-btn,
+  .home-cta-card .nav-login-btn {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   Reduced Motion
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page *,
+  .home-page *::before,
+  .home-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

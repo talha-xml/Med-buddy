@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { MedicalCrossIcon } from '../auth/AuthLayout';
 import DeleteAccountModal from './DeleteAccountModal';
 import VerificationModal from '../common/VerificationModal';
+import NotificationBell from './NotificationBell';
 import { getDoctorStatus } from '../../services/verificationService';
 import {
   FaUserCircle,
@@ -14,7 +15,7 @@ import {
   FaExclamationCircle,
   FaShieldAlt
 } from 'react-icons/fa';
-import './Navbar.css';
+import '../../styles/Navbar.css';
 
 export default function Navbar() {
   const { currentUser, logout } = useAuth();
@@ -129,7 +130,9 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Right Section: Name & Avatar on the Left, Bell Icon on the outermost right */}
         <div className="nav-profile">
+          {/* User Name & Specialty / Role */}
           <div className="user-info">
             <p className="user-name">{currentUser.fullName}</p>
             <p className="user-role-label">
@@ -249,6 +252,9 @@ export default function Navbar() {
               </div>
             )}
           </div>
+
+          {/* Outermost Right: Notification Bell */}
+          <NotificationBell />
         </div>
       </nav>
 

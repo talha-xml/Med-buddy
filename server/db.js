@@ -56,6 +56,12 @@ if (!columnNames.includes('isVerified')) {
 if (!columnNames.includes('isEnabled')) {
   db.exec('ALTER TABLE users ADD COLUMN isEnabled INTEGER DEFAULT 1');
 }
+if (!columnNames.includes('availableFrom')) {
+  db.exec("ALTER TABLE users ADD COLUMN availableFrom TEXT DEFAULT '09:00 AM'");
+}
+if (!columnNames.includes('availableTo')) {
+  db.exec("ALTER TABLE users ADD COLUMN availableTo TEXT DEFAULT '05:00 PM'");
+}
 
 // 2. Create Appointments Table
 db.exec(`
@@ -73,6 +79,21 @@ db.exec(`
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (patientId) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (doctorId) REFERENCES users(id) ON DELETE CASCADE
+  )
+`);
+
+// 3. Create Notifications Table
+db.exec(`
+  CREATE TABLE IF NOT EXISTS notifications (
+    id TEXT PRIMARY KEY,
+    userId TEXT NOT NULL,
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    type TEXT NOT NULL DEFAULT 'appointment',
+    appointmentId TEXT,
+    isRead INTEGER DEFAULT 0,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   )
 `);
 

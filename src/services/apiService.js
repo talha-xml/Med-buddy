@@ -1,5 +1,4 @@
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-
 const CURRENT_USER_KEY = 'slotbuddy_current_user';
 
 // Helper for API fetch
@@ -37,7 +36,6 @@ export async function loginUser(email, password, role) {
     method: 'POST',
     body: JSON.stringify({ email, password, role })
   });
-  // Do NOT store user in localStorage until all checks (verification & enabled) pass
   return result.user;
 }
 

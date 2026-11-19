@@ -1,5 +1,5 @@
 import React from 'react';
-import './ProfileModal.css';
+import '../../styles/ProfileModal.css';
 
 export default function ProfileModal({ user, onClose }) {
   if (!user) return null;
@@ -42,6 +42,14 @@ export default function ProfileModal({ user, onClose }) {
                 <span className="view-label">Experience</span>
                 <span className="view-value">
                   {user.yearsOfExperience ? `${user.yearsOfExperience} Years` : 'Not specified'}
+                </span>
+              </div>
+              <div className="view-field">
+                <span className="view-label">Available Consultation Hours</span>
+                <span className="view-value" style={{ color: '#0d9488', fontWeight: 700 }}>
+                  {user.availableFrom && user.availableTo
+                    ? `${user.availableFrom} – ${user.availableTo}`
+                    : '09:00 AM – 05:00 PM'}
                 </span>
               </div>
               <div className="view-field">

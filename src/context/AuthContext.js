@@ -7,7 +7,6 @@ import {
   updateUserProfile as apiUpdateProfile,
   deleteAccount as apiDeleteAccount
 } from '../services/apiService';
-import { canDoctorLogin } from '../services/verificationService';
 
 const AuthContext = createContext(null);
 
@@ -20,34 +19,22 @@ export const AuthProvider = ({ children }) => {
     setStoredCurrentUser(null);
   }, []);
 
-  // Check login validity on initial load
+  // Initial load check
   useEffect(() => {
     const user = getCurrentUser();
     if (user) {
-      if (user.role === 'doctor') {
-        const check = canDoctorLogin(user.id);
-        if (!check.allowed) {
-          logout();
-          setLoading(false);
-          return;
-        }
-      }
       setUserState(user);
     }
     setLoading(false);
-  }, [logout]);
+  }, []);
 
-  // Reactive listener for admin disable events across tabs/components
+  // Reactive listener for admin status update events across tabs/components
   useEffect(() => {
     const handleStatusChanged = () => {
       const active = getCurrentUser();
       if (active && active.role === 'doctor') {
-        const check = canDoctorLogin(active.id);
-        if (check.reason === 'disabled') {
-          alert(check.message);
-          logout();
-          window.location.href = '/login/doctor';
-        }
+        // Re-read current user in case state was updated
+        setUserState({ ...active });
       }
     };
 
@@ -55,26 +42,13 @@ export const AuthProvider = ({ children }) => {
     return () => {
       window.removeEventListener('medbuddy_doctor_status_changed', handleStatusChanged);
     };
-  }, [logout]);
+  }, []);
 
   const login = async (email, password, selectedRole) => {
-    // 1. Authenticate with credentials
+    // 1. Authenticate with credentials (both enabled and disabled doctors can log in)
     const user = await loginUser(email, password, selectedRole);
 
-    // 2. If user is a doctor, verify they are allowed before establishing session
-    if (user.role === 'doctor') {
-      const check = canDoctorLogin(user.id);
-      if (!check.allowed) {
-        // Do NOT establish session
-        logout();
-        const err = new Error(check.message);
-        err.reason = check.reason;
-        err.user = user;
-        throw err;
-      }
-    }
-
-    // 3. Set verified & enabled session
+    // 2. Set session
     setStoredCurrentUser(user);
     setUserState(user);
     return user;

@@ -347,3 +347,40 @@
   }
 }
 
+
+/* Simplified City Card (Image & Name Only) */
+.city-card-simple {
+  text-align: center;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px -4px rgba(15, 23, 42, 0.08);
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  transition: all 0.25s ease;
+}
+
+.city-card-simple:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px -8px rgba(2, 132, 199, 0.18);
+  border-color: #38bdf8;
+}
+
+.city-card-simple .city-image-container {
+  height: 240px;
+}
+
+.city-card-simple-body {
+  padding: 18px 20px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.city-card-simple-body .city-name {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
