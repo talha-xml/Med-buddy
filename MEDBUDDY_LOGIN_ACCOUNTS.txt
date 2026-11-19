@@ -6,7 +6,7 @@ Coverage: Every Pakistani City x Every Medical Specialty Guaranteed
 Generated on: 2026-11-18T11:08:30.721Z
 
 ----------------------------------------------------------------------------------------
- 🩺 DOCTORS (GROUPED BY CITY & SPECIALTY)
+ DOCTORS (GROUPED BY CITY & SPECIALTY)
 ----------------------------------------------------------------------------------------
 CITY          SPECIALTY                 DOCTOR NAME               EMAIL                       PASSWORD
 --------------------------------------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ Sialkot       Rheumatology              Dr. Nasreen Wasti         nasreen.sia@gm
 Sialkot       Urology                   Dr. Zeeshan Qureshi       zeeshan.sia@gmail.com       zeeshansia12345
 
 ----------------------------------------------------------------------------------------
- 👤 PATIENTS
+ PATIENTS
 ----------------------------------------------------------------------------------------
 CITY          PATIENT NAME              EMAIL                       PASSWORD
 -------------------------------------------------------------------------------------

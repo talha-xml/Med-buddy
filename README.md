@@ -42,25 +42,6 @@
 - **Interactive Slot Booking**: Select a city, specialty, available practitioner, appointment date, time slot, and reason for consultation.
 - **Appointment Management**: Track upcoming and past appointments categorized by status (`Pending`, `Confirmed`, `Completed`, `Cancelled`).
 
----
-
-## Demo & Test Credentials
-
-### Super Administrator Portal (Direct URL: `/admin` or `/login/admin`)
-- **Email**: `admin@medbuddy.healthcare`
-- **Password**: `admin123`
-
-### Doctors & Practitioners (Password: `password123`)
-- **Dr. Hassan Ashraf** (Psychiatry, Lahore): `hassan@gmail.com`
-- **Dr. Alishba Azhar** (Gynecology, Karachi): `alishba@gmail.com`
-- **Dr. Hamza Rizwan** (Pediatrics, Lahore): `hamza@gmail.com`
-
-### Patients (Password: `password123`)
-- **Emily Watson** (Lahore): `emily.watson@example.com`
-- **Robert Langdon** (Karachi): `robert.langdon@example.com`
-- **M. Talha Faizan** (Lahore): `talhafaizan721@gmail.com`
-
----
 
 ## Getting Started
 
